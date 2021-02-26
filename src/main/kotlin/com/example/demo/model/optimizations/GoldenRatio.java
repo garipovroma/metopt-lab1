@@ -1,7 +1,7 @@
 package com.example.demo.model.optimizations;
 
 public class GoldenRatio {
-    double tau = (Math.sqrt(5.0) - 1.0) / 2.0;
+    private final double tau = (Math.sqrt(5.0) - 1.0) / 2.0;
 
     public double f(double x) {
         return -3.0 * x * Math.sin(0.75 * x) + Math.exp(-2.0 * x);
