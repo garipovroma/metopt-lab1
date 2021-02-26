@@ -19,7 +19,7 @@ public class Dichotomy {
                 System.out.println(iter + " " + a + " " + b + " " + x1 + " " + x2 + " " + fx1 + " " + fx2);
             }
             iter++;
-            if (fx1 <= fx2 + EPS) {
+            if (fx1 + EPS >= fx2) {
                 b = x2;
             } else {
                 a = x1;
