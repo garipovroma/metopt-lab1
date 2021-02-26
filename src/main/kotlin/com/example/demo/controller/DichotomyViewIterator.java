@@ -60,4 +60,9 @@ public class DichotomyViewIterator {
         dichotomyIteration = dichotomyIteration.next();
         return res;
     }
+
+    @Override
+    public String toString() {
+        return "Dichotomy";
+    }
 }
