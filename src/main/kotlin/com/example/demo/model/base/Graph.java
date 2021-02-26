@@ -13,7 +13,7 @@ public class Graph {
 
     public Graph(double left, double right, double step, DoubleFunction<Double> func) {
         List<Point> points = new ArrayList<Point>();
-        while(left < right) {
+        while (left < right) {
             points.add(new Point(left, func.apply(left)));
             left += step;
         }
