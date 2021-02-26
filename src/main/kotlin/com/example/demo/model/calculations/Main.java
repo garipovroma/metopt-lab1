@@ -1,6 +1,7 @@
 package com.example.demo.model.calculations;
 
 import com.example.demo.model.optimizations.Dichotomy;
+import com.example.demo.model.optimizations.GoldenRatio;
 
 import java.util.function.DoubleFunction;
 
@@ -13,7 +14,9 @@ public class Main {
             }
         };
         Dichotomy dichotomy = new Dichotomy();
-        dichotomy.run(0, Math.PI * 2.0, 1e-9, 1e-10, true);
+        System.out.println(dichotomy.run(0, Math.PI * 2, 1e-8, 1e-9, true));
+        GoldenRatio goldenRatio = new GoldenRatio();
+        System.out.println(goldenRatio.run(0, Math.PI * 2.0, 1e-9, true));
     }
 }
 
