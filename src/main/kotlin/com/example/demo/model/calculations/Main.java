@@ -13,7 +13,7 @@ public class Main {
             }
         };
         Dichotomy dichotomy = new Dichotomy();
-        dichotomy.run(0, Math.PI * 2.0, 1e-6, 0.5, true);
+        dichotomy.run(0, Math.PI * 2.0, 1e-9, 1e-10, true);
     }
 }
 
