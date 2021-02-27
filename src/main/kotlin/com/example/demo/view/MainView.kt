@@ -1,47 +1,54 @@
 package com.example.demo.view
 
-import com.example.demo.app.Styles
-import javafx.beans.property.SimpleStringProperty
-import javafx.scene.chart.CategoryAxis
+import com.example.demo.controller.DichotomyViewIterator
+import javafx.scene.chart.LineChart
 import javafx.scene.chart.NumberAxis
-import javafx.scene.chart.ValueAxis
 import tornadofx.*
+import java.util.*
+
+class SelectionMethodEvent(val iter: DichotomyViewIterator) : FXEvent()
+
+class NextIterationEvent() : FXEvent()
+
 
 class MainView : View("Hello TornadoFX") {
-    val controller: MyController by inject()
-    val input = SimpleStringProperty()
-    val length = Math.PI
-    val step = length / 1000.0;
-    fun fuktion(x: Double): Double { return 3 * x * Math.sin(0.75 * x) + Math.exp(-2 * x) }
+    val controller: MethodController by inject()
+    var iterator: DichotomyViewIterator? = null
     override val root = vbox {
-        linechart("3x * sin(0.75x) + e^(-2x)", NumberAxis(), NumberAxis()) {
-            series("KAL") {
-                var x = 0.0
-                for (i in 1..1000) {
-                    data(x, fuktion(x))
-                    x += step
+        combobox(values = controller.methods) {
+            setOnAction {
+                fire(SelectionMethodEvent(selectionModel.selectedItem))
+            }
+        }
+        subscribe<SelectionMethodEvent> {
+            iterator = it.iter
+            fire(NextIterationEvent())
+            linechart(iterator.toString(), NumberAxis(0.0, 100.0, 10.0), NumberAxis()) {
+                subscribe<NextIterationEvent> {
+                    if (iterator == null || !iterator!!.hasNext()) {
+
+                    } else {
+                        xAxis
+                        data.clear()
+                        iterator!!.next().forEach {
+                            series(it.toString()) {
+                                it.points.forEach {
+                                    data(it.x, it.y)
+                                }
+                            }
+                        }
+                    }
                 }
             }
         }
-//        form {
-//            fieldset {
-//                field("Input") {
-//                    textfield(input)
-//                }
-//
-//                button("Commit") {
-//                    action {
-//                        controller.writeToDb(input.value)
-//                        input.value = ""
-//                    }
-//                }
-//            }
-//        }
+        button("next") {
+            setOnAction {
+                fire(NextIterationEvent())
+            }
+        }
     }
 }
 
-class MyController: Controller() {
-    fun writeToDb(inputValue: String) {
-        println("Writing $inputValue to database!")
-    }
+class MethodController: Controller() {
+    val methods = listOf(DichotomyViewIterator(0.0, Math.PI * 2.0, 1e-9, 1e-10))
 }
