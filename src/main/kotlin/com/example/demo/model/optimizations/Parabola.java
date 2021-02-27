@@ -11,9 +11,12 @@ public class Parabola {
         return Double.compare(x, y);
     }
     private int compareWithEps(double x, double y) {
-        if (Math.abs(x - y) <= -EPS) {
+        if (Math.abs(x - y) < EPS) {
+            return 0;
+        }
+        if (x - y <= -EPS) {
             return -1;
-        } else if (Math.abs(x - y) > EPS) {
+        } else if (x - y >= EPS) {
             return 1;
         }
         return 1;
@@ -52,7 +55,7 @@ public class Parabola {
                     pMinX + " " + pMinY);
 
             if (!firstIteration) {
-                if (compareWithEps(pMinX, prevIterationMinX) < 0) {
+                if (compareWithEps(pMinX, prevIterationMinX) == 0) {
                     minX = pMinX;
                     break;
                 }
@@ -82,6 +85,9 @@ public class Parabola {
             // Now x1, x2, x3 are new bounds
             prevIterationMinX = pMinX;
             iter++;
+            /*if (iter == 11) {
+                break;
+            }*/
         }
         double minx = prevIterationMinX;
         return minX;
