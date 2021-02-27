@@ -1,9 +1,11 @@
 package com.example.demo.model.optimizations;
 
+import com.example.demo.model.base.Point;
+
 import java.util.Random;
 
 public class Parabola {
-    private final static double EPS = 1e-6;
+    private final static double EPS = 1e-8;
     public double f(double x) {
         return -3.0 * x * Math.sin(0.75 * x) + Math.exp(-2.0 * x);
     }
@@ -38,11 +40,11 @@ public class Parabola {
                 a2 = ( (x3 - f1) / (x3 - x1) - (f2 - f1) / (x2 - x1) ) / (x3 - x2);
         return (x1 + x2 - a1 / a2) / 2;
     }
-    public double run(double l, double r) {
+    public Point run(double l, double r) {
         double x1 = l, x2 = findInitialPoint(l, r), x3 = r;
         int iter = 0;
         boolean firstIteration = true;
-        double minX = Double.NaN;
+        double minX = Double.NaN, minY;
         double prevIterationMinX = Double.NaN;
         while (true) {
             double f1 = f(x1), f2 = f(x2), f3 = f(x3);
@@ -89,8 +91,9 @@ public class Parabola {
                 break;
             }*/
         }
-        double minx = prevIterationMinX;
-        return minX;
+        minX = prevIterationMinX;
+        minY = f(minX);
+        return new Point(minX, minY);
     }
 
 }
