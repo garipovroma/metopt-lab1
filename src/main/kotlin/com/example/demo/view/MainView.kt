@@ -1,6 +1,7 @@
 package com.example.demo.view
 
 import com.example.demo.controller.DichotomyViewIterator
+import com.example.demo.controller.GoldenRationViewIterator
 import com.example.demo.controller.ParabolaViewIterator
 import com.example.demo.controller.ViewIterator
 import com.example.demo.model.base.Graph
@@ -78,5 +79,5 @@ class MainView : View("Hello TornadoFX") {
 }
 
 class MethodController: Controller() {
-    val methods = listOf(DichotomyViewIterator(0.0, Math.PI * 2.0, 1e-5, 1e-6), ParabolaViewIterator(0.0, Math.PI * 2.0, 1e-5))
+    val methods = listOf(DichotomyViewIterator(0.0, Math.PI * 2.0, 1e-5, 1e-6), GoldenRationViewIterator(0.0, Math.PI * 2.0, 1e-5, 1e-6), ParabolaViewIterator(0.0, Math.PI * 2.0, 1e-5))
 }
