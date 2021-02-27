@@ -1,11 +1,38 @@
 package com.example.demo.model.optimizations;
 
 import com.example.demo.model.base.Point;
+import com.example.demo.model.iterations.ParabolaIteration;
 
-import java.util.Random;
+import java.util.function.DoubleFunction;
 
 public class Parabola {
-    private final double EPS;
+    private ParabolaIteration iteration;
+
+    public Parabola(double left, double right, double eps, DoubleFunction<Double> func) {
+        iteration = new ParabolaIteration(left, right, eps, func);
+    }
+
+    public Parabola(double left, double right, double eps) {
+        iteration = new ParabolaIteration(left, right, eps, x -> -3.0 * x * Math.sin(0.75 * x) + Math.exp(-2.0 * x));
+    }
+
+    public Point run(boolean print) {
+        if (print) {
+            System.out.println(iteration);
+        }
+        while (iteration.hasNext()) {
+            iteration = iteration.next();
+            if (print) {
+                System.out.println(iteration);
+            }
+        }
+        double x = iteration.getpMinX();
+        double y = iteration.getpMinY();
+        return new Point(x, y);
+    }
+
+
+    /*private final double EPS;
     private final double left, right;
 
     public Parabola(double left, double right, double EPS) {
@@ -14,6 +41,17 @@ public class Parabola {
         this.EPS = EPS;
     }
 
+    private double findInitialPoint(double l, double r) {
+        double x1 = l, x3 = r, x2;
+        Random random = new Random();
+        for (int i = 0; i < 1000; i++) {
+            x2 = random.nextDouble() * (r - l) + l;
+            if (compare(f(x2), f(x1)) <= 0 && compare(f(x2), f(x3)) <= 0) {
+                return x2;
+            }
+        }
+        throw new RuntimeException("Can't find initial x2 value");
+    }
     public double f(double x) {
         return -3.0 * x * Math.sin(0.75 * x) + Math.exp(-2.0 * x);
     }
@@ -30,17 +68,6 @@ public class Parabola {
             return 1;
         }
         return 1;
-    }
-    private double findInitialPoint(double l, double r) {
-        double x1 = l, x3 = r, x2;
-        Random random = new Random();
-        for (int i = 0; i <= 100; i++) {
-            x2 = random.nextDouble() * (r - l) + l;
-            if (compare(f(x2), f(x1)) <= 0 && compare(f(x2), f(x3)) <= 0) {
-                return x2;
-            }
-        }
-        throw new RuntimeException("Can't find x2");
     }
     private double findParabolaMinX(double x1, double x2, double x3) {
         double f1 = f(x1), f2 = f(x2), f3 = f(x3);
@@ -95,13 +122,13 @@ public class Parabola {
             // Now x1, x2, x3 are new bounds
             prevIterationMinX = pMinX;
             iter++;
-            /*if (iter == 11) {
+            *//*if (iter == 11) {
                 break;
-            }*/
+            }*//*
         }
         minX = prevIterationMinX;
         minY = f(minX);
         return new Point(minX, minY);
-    }
+    }*/
 
 }

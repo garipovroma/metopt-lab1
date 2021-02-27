@@ -11,7 +11,6 @@ public class DichotomyIteration implements OptimizationMethodIteration {
     private final double x2;
     private final double fx1;
     private final double fx2;
-    private final static double compareAccuracy = 1e-8;
     private final DoubleFunction<Double> func;
 
     public DichotomyIteration(double left, double right, double eps, double delta, DoubleFunction<Double> func) {
@@ -22,8 +21,8 @@ public class DichotomyIteration implements OptimizationMethodIteration {
         this.func = func;
         this.x1 = (right + left - delta) / 2.0;
         this.x2 = (right + left + delta) / 2.0;
-        this.fx1 = func.apply(x1);
-        this.fx2 = func.apply(x2);
+        this.fx1 = f(x1);
+        this.fx2 = f(x2);
     }
 
     private double f(double x) {
@@ -56,10 +55,6 @@ public class DichotomyIteration implements OptimizationMethodIteration {
 
     public double getEps() {
         return eps;
-    }
-
-    public static double getCompareAccuracy() {
-        return compareAccuracy;
     }
 
     public DoubleFunction<Double> getFunc() {
