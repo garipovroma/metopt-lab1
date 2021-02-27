@@ -21,7 +21,7 @@ public class GoldenRatio {
             System.out.println(iteration);
         }
         while (iteration.hasNext()) {
-            iteration = (GoldenRatioIteration) iteration.next();
+            iteration = iteration.next();
             if (print) {
                 System.out.println(iteration);
             }

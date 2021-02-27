@@ -14,9 +14,9 @@ public class Main {
             }
         };
         Dichotomy dichotomy = new Dichotomy(0, 2 * Math.PI, 1e-8, 1e-9);
-        System.out.println(dichotomy.run(true));
+        System.out.println(dichotomy.run(false));
         GoldenRatio goldenRatio = new GoldenRatio(0, 2 * Math.PI, 1e-8);
-        System.out.println(goldenRatio.run(true));
+        System.out.println(goldenRatio.run(false));
     }
 }
 

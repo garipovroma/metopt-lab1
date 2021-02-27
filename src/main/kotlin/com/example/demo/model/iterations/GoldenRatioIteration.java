@@ -47,6 +47,14 @@ public class GoldenRatioIteration implements OptimizationMethodIteration {
         return ((right - left) > eps * 2.0);
     }
 
+    @Override
+    public GoldenRatioIteration next() {
+        return fx1 <= fx2 ?
+                new GoldenRatioIteration(left, x2, x2 - GoldenRatio.tau * (x2 - left), x1, fx1, fx2, eps, func, -1) :
+                new GoldenRatioIteration(x1, right, x2, x1 + GoldenRatio.tau * (right - x1), fx1, fx2, eps, func, 1);
+
+    }
+
     public double getLeft() {
         return left;
     }
@@ -81,14 +89,6 @@ public class GoldenRatioIteration implements OptimizationMethodIteration {
 
     public DoubleFunction<Double> getFunc() {
         return func;
-    }
-
-    @Override
-    public OptimizationMethodIteration next() {
-        return fx1 <= fx2 ?
-                new GoldenRatioIteration(left, x2, x2 - GoldenRatio.tau * (x2 - left), x1, fx1, fx2, eps, func, -1) :
-                new GoldenRatioIteration(x1, right, x2, x1 + GoldenRatio.tau * (right - x1), fx1, fx2, eps, func, 1);
-
     }
 
     @Override
