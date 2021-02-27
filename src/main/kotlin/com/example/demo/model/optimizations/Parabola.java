@@ -5,7 +5,15 @@ import com.example.demo.model.base.Point;
 import java.util.Random;
 
 public class Parabola {
-    private final static double EPS = 1e-8;
+    private final double EPS;
+    private final double left, right;
+
+    public Parabola(double left, double right, double EPS) {
+        this.left = left;
+        this.right = right;
+        this.EPS = EPS;
+    }
+
     public double f(double x) {
         return -3.0 * x * Math.sin(0.75 * x) + Math.exp(-2.0 * x);
     }
@@ -40,8 +48,8 @@ public class Parabola {
                 a2 = ( (x3 - f1) / (x3 - x1) - (f2 - f1) / (x2 - x1) ) / (x3 - x2);
         return (x1 + x2 - a1 / a2) / 2;
     }
-    public Point run(double l, double r) {
-        double x1 = l, x2 = findInitialPoint(l, r), x3 = r;
+    public Point run() {
+        double x1 = left, x2 = findInitialPoint(left, right), x3 = right;
         int iter = 0;
         boolean firstIteration = true;
         double minX = Double.NaN, minY;
@@ -51,7 +59,7 @@ public class Parabola {
             double pMinX = findParabolaMinX(x1, x2, x3);
             double pMinY = f(pMinX);
 
-            System.out.println(iter + " " + l + " " + r + " " +
+            System.out.println(iter + " " + left + " " + right + " " +
                     x1 + " " + x2 + " " + x3 + " " +
                     f1 + " " + f2 + " " + f3 + " " +
                     pMinX + " " + pMinY);
