@@ -27,4 +27,11 @@ public class Graph {
     public List<Point> getPoints() {
         return points;
     }
+
+    @Override
+    public String toString() {
+        return "Graph{" +
+                "points=" + points +
+                '}';
+    }
 }

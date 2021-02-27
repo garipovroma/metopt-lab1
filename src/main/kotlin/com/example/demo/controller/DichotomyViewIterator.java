@@ -9,7 +9,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.function.DoubleFunction;
 
-public class DichotomyViewIterator {
+public class DichotomyViewIterator implements ViewIterator {
     private DichotomyIteration dichotomyIteration;
     private final Point extremum;
 

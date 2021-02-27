@@ -2,13 +2,15 @@ package com.example.demo.model.iterations;
 
 import java.util.function.DoubleFunction;
 
-public class DichotomyIteration {
+public class DichotomyIteration implements OptimizationMethodIteration {
     private final double left;
     private final double right;
     private final double delta;
     private final double eps;
     private final double x1;
     private final double x2;
+    private final double fx1;
+    private final double fx2;
     private final static double compareAccuracy = 1e-8;
     private final DoubleFunction<Double> func;
 
@@ -20,21 +22,21 @@ public class DichotomyIteration {
         this.func = func;
         this.x1 = (right + left - delta) / 2.0;
         this.x2 = (right + left + delta) / 2.0;
+        this.fx1 = func.apply(x1);
+        this.fx2 = func.apply(x2);
     }
 
     private double f(double x) {
         return func.apply(x);
     }
 
+    @Override
     public boolean hasNext() {
         return ((right - left) > eps * 2.0);
     }
 
+    @Override
     public DichotomyIteration next() {
-        double x1 = (right + left - delta) / 2.0;
-        double x2 = (right + left + delta) / 2.0;
-        double fx1 = f(x1);
-        double fx2 = f(x2);
         return fx1 <= fx2 ?
                 new DichotomyIteration(left, x2, delta, eps, func) :
                 new DichotomyIteration(x1, right, delta, eps, func);
