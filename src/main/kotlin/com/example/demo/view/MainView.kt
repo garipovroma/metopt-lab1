@@ -1,47 +1,80 @@
 package com.example.demo.view
 
-import com.example.demo.app.Styles
-import javafx.beans.property.SimpleStringProperty
-import javafx.scene.chart.CategoryAxis
+import com.example.demo.controller.DichotomyViewIterator
+import com.example.demo.model.base.Graph
+import javafx.scene.chart.LineChart
 import javafx.scene.chart.NumberAxis
-import javafx.scene.chart.ValueAxis
 import tornadofx.*
+import java.util.*
 
-class MainView : View("Hello TornadoFX") {
-    val controller: MyController by inject()
-    val input = SimpleStringProperty()
-    val length = Math.PI
-    val step = length / 1000.0;
-    fun fuktion(x: Double): Double { return 3 * x * Math.sin(0.75 * x) + Math.exp(-2 * x) }
-    override val root = vbox {
-        linechart("3x * sin(0.75x) + e^(-2x)", NumberAxis(), NumberAxis()) {
-            series("KAL") {
-                var x = 0.0
-                for (i in 1..1000) {
-                    data(x, fuktion(x))
-                    x += step
+class SelectionMethodEvent(val iter: DichotomyViewIterator) : FXEvent()
+
+class NextIterationEvent(val graphs: List<Graph>) : FXEvent()
+
+class GraphView() : Fragment() {
+    override val root = hbox {
+    }
+    fun getChart(graphs: List<Graph>): LineChart<Number, Number> = run {
+        var xmax = -1e9
+        var xmin = 1e9
+        var ymax = -1e9
+        var ymin = 1e9
+        graphs.forEach {
+            it.points.forEach {
+                xmax = Math.max(xmax, it.x)
+                xmin = Math.min(xmin, it.x)
+                ymax = Math.max(ymax, it.y)
+                ymin = Math.min(ymin, it.y)
+            }
+        }
+        linechart(graphs.toString(), NumberAxis(xmin, xmax,(xmax - xmin) / 10.0), NumberAxis(ymin, ymax, (ymax - ymin) / 10.0)) {
+            graphs.forEach {
+                series(it.toString()) {
+                    it.points.forEach {
+                        data(it.x, it.y)
+                    }
                 }
             }
         }
-//        form {
-//            fieldset {
-//                field("Input") {
-//                    textfield(input)
-//                }
-//
-//                button("Commit") {
-//                    action {
-//                        controller.writeToDb(input.value)
-//                        input.value = ""
-//                    }
-//                }
-//            }
-//        }
     }
 }
 
-class MyController: Controller() {
-    fun writeToDb(inputValue: String) {
-        println("Writing $inputValue to database!")
+class MainView : View("Hello TornadoFX") {
+    val controller: MethodController by inject()
+    var iterator: DichotomyViewIterator? = null
+    var graphView = GraphView()
+    override val root = vbox {
+        combobox(values = controller.methods) {
+            setOnAction {
+                fire(SelectionMethodEvent(selectionModel.selectedItem))
+            }
+        }
+        add(graphView)
+        subscribe<SelectionMethodEvent> {
+            iterator = it.iter
+            if (iterator!!.hasNext()) {
+                fire(NextIterationEvent(iterator!!.next()))
+            }
+        }
+        button("next") {
+            action {
+                fire(NextIterationEvent(iterator!!.next()))
+            }
+        }
+        subscribe<NextIterationEvent> {
+            println(it.graphs)
+            graphView.root.clear()
+            val chart = graphView.getChart(it.graphs)
+            chart.createSymbols = false
+            graphView.root.add(
+                hbox {
+                    add(chart)
+                }
+            )
+        }
     }
+}
+
+class MethodController: Controller() {
+    val methods = listOf(DichotomyViewIterator(0.0, Math.PI * 2.0, 1e-5, 1e-6), DichotomyViewIterator(0.0, Math.PI * 2.0, 1e-9, 1e-10))
 }
