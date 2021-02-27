@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class ParabolaViewIterator extends BaseViewIterator{
+
     private ParabolaIteration parabolaIteration;
     private final Point extremum;
     public ParabolaViewIterator(double left, double right, double eps) {
@@ -39,5 +40,10 @@ public class ParabolaViewIterator extends BaseViewIterator{
         addSinglePointGraph(res, extremum);
         parabolaIteration = parabolaIteration.next();
         return res;
+    }
+
+    @Override
+    public String toString() {
+        return "Parabola";
     }
 }
