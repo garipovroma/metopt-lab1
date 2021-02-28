@@ -2,6 +2,9 @@ package com.example.demo.view
 
 import com.example.demo.app.Styles
 import com.example.demo.controller.DichotomyViewIterator
+import com.example.demo.controller.GoldenRationViewIterator
+import com.example.demo.controller.ParabolaViewIterator
+import com.example.demo.controller.ViewIterator
 import com.example.demo.model.base.Graph
 import com.example.demo.model.base.Point
 import javafx.scene.chart.LineChart
@@ -9,13 +12,13 @@ import javafx.scene.chart.NumberAxis
 import tornadofx.*
 import java.util.*
 
-class SelectionMethodEvent(val iter: DichotomyViewIterator) : FXEvent()
+class SelectionMethodEvent(val iter: ViewIterator) : FXEvent()
 
 class NextIterationEvent(val graphs: List<Graph>) : FXEvent()
 
 class MainView : View("huy TornadoFX") {
     val controller: MethodController by inject()
-    var iterator: DichotomyViewIterator? = null
+    var iterator: ViewIterator? = null
 
     fun getChart(graphs: List<Graph>): LineChart<Number, Number>.() -> Unit = {
         graphs.map {
@@ -94,5 +97,5 @@ class MainView : View("huy TornadoFX") {
 }
 
 class MethodController: Controller() {
-    val methods = listOf(DichotomyViewIterator(0.0, Math.PI * 2.0, 1e-5, 1e-6), DichotomyViewIterator(0.0, Math.PI * 2.0, 1e-9, 1e-10))
+    val methods = listOf(DichotomyViewIterator(0.0, Math.PI * 2.0, 1e-5, 1e-6), GoldenRationViewIterator(0.0, Math.PI * 2.0, 1e-5, 1e-6), ParabolaViewIterator(0.0, Math.PI * 2.0, 1e-5))
 }

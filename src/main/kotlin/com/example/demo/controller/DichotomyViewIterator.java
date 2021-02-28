@@ -9,7 +9,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.function.DoubleFunction;
 
-public class DichotomyViewIterator implements ViewIterator {
+public class DichotomyViewIterator extends BaseViewIterator {
     private DichotomyIteration dichotomyIteration;
     private final Point extremum;
 
@@ -21,13 +21,6 @@ public class DichotomyViewIterator implements ViewIterator {
     public boolean hasNext() {
         return dichotomyIteration.hasNext();
     }
-
-     private void addSinglePointGraph(List<Graph> points, Point point) {
-        List<Point> single = new ArrayList<>();
-        single.add(point);
-        points.add(new Graph(single));
-
-     }
 
     public List<Graph> next() {
         List<Graph> res = new ArrayList<>();
