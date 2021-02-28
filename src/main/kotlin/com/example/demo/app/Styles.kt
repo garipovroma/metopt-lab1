@@ -23,6 +23,10 @@ class Styles : Stylesheet() {
         chartBox {
             minWidth = 1000.px
         }
+        button {
+            endMargin = 4.px
+            startMargin = 4.px
+        }
         chartLineSymbol {
             padding = box(1.px)
 //            backgroundRadius = multi(box(100.px))

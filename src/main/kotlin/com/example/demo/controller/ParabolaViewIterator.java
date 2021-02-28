@@ -17,7 +17,7 @@ public class ParabolaViewIterator extends BaseViewIterator{
     }
     @Override
     public boolean hasNext() {
-        return false;
+        return parabolaIteration.hasNext();
     }
 
     @Override

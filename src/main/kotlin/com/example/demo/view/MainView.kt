@@ -7,6 +7,7 @@ import com.example.demo.controller.ParabolaViewIterator
 import com.example.demo.controller.ViewIterator
 import com.example.demo.model.base.Graph
 import com.example.demo.model.base.Point
+import javafx.scene.chart.Axis
 import javafx.scene.chart.LineChart
 import javafx.scene.chart.NumberAxis
 import tornadofx.*
@@ -30,10 +31,10 @@ class MainView : View("huy TornadoFX") {
         }
     }
 
-    fun getXAxis(graphs: List<Graph>): NumberAxis = run {
+    private fun NumberAxis.setXAxis(graphs: List<Graph>) {
         val left = graphs.foldRight<Graph, Double>(100.0) { el, acc ->
-            val min = el.points.foldRight<Point, Double>(100.0) { point, pacc ->
-                if (point.x < pacc) point.x else pacc
+            val min = el.points.foldRight<Point, Double>(100.0) { point, pAcc ->
+                if (point.x < pAcc) point.x else pAcc
             }
             if (min < acc) min else acc
         }
@@ -43,34 +44,55 @@ class MainView : View("huy TornadoFX") {
             }
             if (max > acc) max else acc
         }
-        NumberAxis(left, right, (right - left) / 15.0)
+        lowerBound = left
+        upperBound = right
+        tickUnit = (right - left) / 10.0
     }
 
-    fun getYAxis(graphs: List<Graph>): NumberAxis = run {
-        val left = graphs.foldRight<Graph, Double>(100.0) { el, acc ->
+    private fun NumberAxis.setYAxis(graphs: List<Graph>) {
+        val left = graphs.foldRight(100.0) { el, acc ->
             val min = el.points.foldRight<Point, Double>(100.0) { point, pacc ->
                 if (point.y < pacc) point.y else pacc
             }
             if (min < acc) min else acc
         }
-        val right = graphs.foldRight<Graph, Double>(-100.0) { el, acc ->
+        val right = graphs.foldRight(-100.0) { el, acc ->
             val max = el.points.foldRight<Point, Double>(-100.0) { point, pacc ->
                 if (point.y > pacc) point.y else pacc
             }
             if (max > acc) max else acc
         }
-        NumberAxis(left, right, (right - left) / 15.0)
+        lowerBound = left
+        upperBound = right
+        tickUnit = (right - left) / 10.0
+    }
+
+    private fun assignAxis(axis: NumberAxis, otherAxis: NumberAxis): Unit {
+        axis.lowerBound = otherAxis.lowerBound
+        axis.upperBound = otherAxis.upperBound
+        axis.tickUnit = otherAxis.tickUnit
     }
 
     override val root = hbox {
         addClass(Styles.chartBox)
-        combobox(values = controller.methods) {
-            setOnAction {
-                fire(SelectionMethodEvent(selectionModel.selectedItem))
+        vbox {
+            combobox(values = controller.methods) {
+                setOnAction {
+                    fire(SelectionMethodEvent(selectionModel.selectedItem))
+                }
+            }
+            button("next") {
+                action {
+                    fire(NextIterationEvent(iterator!!.next()))
+                }
             }
         }
-        linechart("none", NumberAxis(), NumberAxis()) {
-            id = "hueta"
+        val xAxis = NumberAxis()
+        xAxis.isForceZeroInRange = false
+        val yAxis = NumberAxis()
+        yAxis.isForceZeroInRange = false
+        val chart = linechart("none", xAxis, yAxis) {
+            id = "method-chart"
             addClass(Styles.chartBox)
         }
         subscribe<SelectionMethodEvent> {
@@ -79,17 +101,11 @@ class MainView : View("huy TornadoFX") {
                 fire(NextIterationEvent(iterator!!.next()))
             }
         }
-        button("next") {
-            action {
-                fire(NextIterationEvent(iterator!!.next()))
-            }
-        }
         subscribe<NextIterationEvent> {
-            this@hbox.children.asSequence().filter { it.id == "hueta" }.toList()[0].removeFromParent()
-            val chart = linechart(iterator.toString(), getXAxis(it.graphs), getYAxis(it.graphs)) {
-                id = "hueta"
-                addClass(Styles.chartBox)
-            }
+            chart.title = iterator.toString()
+            chart.data.clear()
+            xAxis.setXAxis(it.graphs)
+            yAxis.setYAxis(it.graphs)
             chart.(getChart(it.graphs))()
             this@hbox.add(chart)
         }
@@ -97,5 +113,10 @@ class MainView : View("huy TornadoFX") {
 }
 
 class MethodController: Controller() {
-    val methods = listOf(DichotomyViewIterator(0.0, Math.PI * 2.0, 1e-5, 1e-6), GoldenRationViewIterator(0.0, Math.PI * 2.0, 1e-5, 1e-6), ParabolaViewIterator(0.0, Math.PI * 2.0, 1e-5))
+    val methods =
+        listOf(
+            DichotomyViewIterator(0.0, Math.PI * 2.0, 1e-5, 1e-6),
+            GoldenRationViewIterator(0.0, Math.PI * 2.0, 1e-5, 1e-6),
+            ParabolaViewIterator(0.0, Math.PI * 2.0, 1e-5),
+        )
 }
