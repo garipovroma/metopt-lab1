@@ -128,7 +128,7 @@ public class ParabolaIteration implements OptimizationMethodIteration {
     }
 
     @Override
-    public boolean hasNext() { return compareWithEps(prevPMinX, pMinX) == 0; }
+    public boolean hasNext() { return isFirst || compareWithEps(prevPMinX, pMinX) == 0; }
 
     @Override
     public ParabolaIteration next() {
