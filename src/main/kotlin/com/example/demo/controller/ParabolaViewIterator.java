@@ -37,7 +37,7 @@ public class ParabolaViewIterator extends BaseViewIterator{
                 100,
                 parabolaIteration.getApproximationParabola()
         ));
-        addSinglePointGraph(res, extremum);
+//        addSinglePointGraph(res, extremum);
         parabolaIteration = parabolaIteration.next();
         return res;
     }

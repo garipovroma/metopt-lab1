@@ -20,6 +20,7 @@ public class ParabolaIteration implements OptimizationMethodIteration {
     private final double pMinY;
     private final DoubleFunction<Double> approximationParabola;
     private final boolean isFirst;
+    private final double prevPMinX;
 
     private final DoubleFunction<Double> func;
 
@@ -82,6 +83,25 @@ public class ParabolaIteration implements OptimizationMethodIteration {
         this.pMinX = findParabolaMinX();
         this.pMinY = f(pMinX);
         this.approximationParabola = findApproximationParabola();
+        this.prevPMinX = Double.NaN;
+    }
+
+    private ParabolaIteration(double left, double right, double x1, double x2, double x3, double fx1, double fx2, double fx3, double eps, DoubleFunction<Double> func, double prevPMinX) {
+        this.left = left;
+        this.right = right;
+        this.x1 = x1;
+        this.x2 = x2;
+        this.x3 = x3;
+        this.fx1 = fx1;
+        this.fx2 = fx2;
+        this.fx3 = fx3;
+        this.func = func;
+        this.isFirst = false;
+        this.eps = eps;
+        this.pMinX = findParabolaMinX();
+        this.pMinY = f(pMinX);
+        this.approximationParabola = findApproximationParabola();
+        this.prevPMinX = prevPMinX;
     }
 
     private DoubleFunction<Double> findApproximationParabola() {
@@ -108,26 +128,7 @@ public class ParabolaIteration implements OptimizationMethodIteration {
     }
 
     @Override
-    public boolean hasNext() {
-        return ((right - left) > eps * 2.0);
-    }
-
-    private ParabolaIteration(double left, double right, double x1, double x2, double x3, double fx1, double fx2, double fx3, double eps, DoubleFunction<Double> func) {
-        this.left = left;
-        this.right = right;
-        this.x1 = x1;
-        this.x2 = x2;
-        this.x3 = x3;
-        this.fx1 = fx1;
-        this.fx2 = fx2;
-        this.fx3 = fx3;
-        this.func = func;
-        this.isFirst = false;
-        this.eps = eps;
-        this.pMinX = findParabolaMinX();
-        this.pMinY = f(pMinX);
-        this.approximationParabola = findApproximationParabola();
-    }
+    public boolean hasNext() { return compareWithEps(prevPMinX, pMinX) == 0; }
 
     @Override
     public ParabolaIteration next() {
@@ -154,7 +155,7 @@ public class ParabolaIteration implements OptimizationMethodIteration {
                 nfx3 = pMinY;
             }
         }
-        return new ParabolaIteration(nx1, nx3, nx1, nx2, nx3, nfx1, nfx2, nfx3, eps, func);
+        return new ParabolaIteration(nx1, nx3, nx1, nx2, nx3, nfx1, nfx2, nfx3, eps, func, pMinX);
     }
 
     public double getLeft() {
