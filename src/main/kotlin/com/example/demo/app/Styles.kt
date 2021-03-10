@@ -1,12 +1,10 @@
 package com.example.demo.app
 
-import javafx.scene.paint.Color
 import javafx.scene.text.FontWeight
 import tornadofx.*
 
 class Styles : Stylesheet() {
     companion object {
-        val heading by cssclass()
         val chartBox by cssclass()
     }
 
@@ -27,10 +25,8 @@ class Styles : Stylesheet() {
             endMargin = 4.px
             startMargin = 4.px
         }
-        chartLineSymbol {
-            padding = box(1.px)
-//            backgroundRadius = multi(box(100.px))
-//            backgroundColor = multi(Color.RED)
-        }
+//        chartLineSymbol {
+//            padding = box(1.px)
+//        }
     }
 }

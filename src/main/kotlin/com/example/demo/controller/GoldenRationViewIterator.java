@@ -1,8 +1,8 @@
 package com.example.demo.controller;
 
+import com.example.demo.model.base.BaseGraph;
 import com.example.demo.model.base.Graph;
 import com.example.demo.model.base.Point;
-import com.example.demo.model.iterations.DichotomyIteration;
 import com.example.demo.model.iterations.GoldenRatioIteration;
 import com.example.demo.model.optimizations.Dichotomy;
 
@@ -25,7 +25,7 @@ public class GoldenRationViewIterator extends BaseViewIterator {
     public List<Graph> next() {
         List<Graph> res = new ArrayList<>();
         res.add(
-                new Graph(
+                new BaseGraph(
                         goldenRatioIteration.getLeft(),
                         goldenRatioIteration.getRight(),
                         100,
@@ -35,21 +35,21 @@ public class GoldenRationViewIterator extends BaseViewIterator {
                 new Point(
                         goldenRatioIteration.getX1(),
                         goldenRatioIteration.getFunc().apply(goldenRatioIteration.getX1())
-                )
+                ), null
         );
         addSinglePointGraph(res,
                 new Point(
                         goldenRatioIteration.getX2(),
                         goldenRatioIteration.getFunc().apply(goldenRatioIteration.getX2())
-                )
+                ), null
         );
         addSinglePointGraph(res,
                 new Point(
                         goldenRatioIteration.getX1(),
                         goldenRatioIteration.getFunc().apply(goldenRatioIteration.getX1())
-                )
+                ), null
         );
-        addSinglePointGraph(res, extremum);
+        addSinglePointGraph(res, extremum, null);
         goldenRatioIteration = goldenRatioIteration.next();
         return res;
     }

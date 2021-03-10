@@ -1,10 +1,10 @@
 package com.example.demo.model.iterations;
 
+import com.example.demo.model.base.DoubleFunction;
 import org.ejml.data.DMatrixRMaj;
 import org.ejml.simple.SimpleMatrix;
 
 import java.util.Random;
-import java.util.function.DoubleFunction;
 
 public class ParabolaIteration implements OptimizationMethodIteration {
     private final double left;
@@ -18,11 +18,11 @@ public class ParabolaIteration implements OptimizationMethodIteration {
     private final double fx3;
     private final double pMinX;
     private final double pMinY;
-    private final DoubleFunction<Double> approximationParabola;
+    private final DoubleFunction approximationParabola;
     private final boolean isFirst;
     private final double prevPMinX;
 
-    private final DoubleFunction<Double> func;
+    private final DoubleFunction func;
 
     private double findParabolaMinX() {
         double a0 = fx1, a1 = (fx2 - fx1) / (x2 - x1),
@@ -56,7 +56,7 @@ public class ParabolaIteration implements OptimizationMethodIteration {
         throw new RuntimeException("Can't find initial x2 value");
     }
 
-    public DoubleFunction<Double> getApproximationParabola() {
+    public DoubleFunction getApproximationParabola() {
         return approximationParabola;
     }
 
@@ -68,7 +68,7 @@ public class ParabolaIteration implements OptimizationMethodIteration {
         return pMinY;
     }
 
-    public ParabolaIteration(double left, double right, double eps, DoubleFunction<Double> func) {
+    public ParabolaIteration(double left, double right, double eps, DoubleFunction func) {
         this.isFirst = true;
         this.left = left;
         this.right = right;
@@ -86,7 +86,7 @@ public class ParabolaIteration implements OptimizationMethodIteration {
         this.prevPMinX = Double.NaN;
     }
 
-    private ParabolaIteration(double left, double right, double x1, double x2, double x3, double fx1, double fx2, double fx3, double eps, DoubleFunction<Double> func, double prevPMinX) {
+    private ParabolaIteration(double left, double right, double x1, double x2, double x3, double fx1, double fx2, double fx3, double eps, DoubleFunction func, double prevPMinX) {
         this.left = left;
         this.right = right;
         this.x1 = x1;
@@ -104,7 +104,7 @@ public class ParabolaIteration implements OptimizationMethodIteration {
         this.prevPMinX = prevPMinX;
     }
 
-    private DoubleFunction<Double> findApproximationParabola() {
+    private DoubleFunction findApproximationParabola() {
         SimpleMatrix equation = new SimpleMatrix(
                 new DMatrixRMaj(
                         new double[][]{
@@ -170,7 +170,7 @@ public class ParabolaIteration implements OptimizationMethodIteration {
         return eps;
     }
 
-    public DoubleFunction<Double> getFunc() {
+    public DoubleFunction getFunc() {
         return func;
     }
 

@@ -1,8 +1,7 @@
 package com.example.demo.model.iterations;
 
+import com.example.demo.model.base.DoubleFunction;
 import com.example.demo.model.optimizations.GoldenRatio;
-
-import java.util.function.DoubleFunction;
 
 public class GoldenRatioIteration implements OptimizationMethodIteration {
     private final double left;
@@ -13,13 +12,13 @@ public class GoldenRatioIteration implements OptimizationMethodIteration {
     private final double fx1;
     private final double fx2;
     private final static double compareAccuracy = 1e-8;
-    private final DoubleFunction<Double> func;
+    private final DoubleFunction func;
 
-    public GoldenRatioIteration(double left, double right, double eps, DoubleFunction<Double> func) {
+    public GoldenRatioIteration(double left, double right, double eps, DoubleFunction func) {
         this(left, right, left + (1.0 - GoldenRatio.tau) * (right - left), left + GoldenRatio.tau * (right - left), 0, 0, eps, func, 0);
     }
 
-    private GoldenRatioIteration(double left, double right, double x1, double x2, double fx1, double fx2, double eps, DoubleFunction<Double> func, int calcLeft) {
+    private GoldenRatioIteration(double left, double right, double x1, double x2, double fx1, double fx2, double eps, DoubleFunction func, int calcLeft) {
         this.left = left;
         this.right = right;
         this.eps = eps;
@@ -87,7 +86,7 @@ public class GoldenRatioIteration implements OptimizationMethodIteration {
         return compareAccuracy;
     }
 
-    public DoubleFunction<Double> getFunc() {
+    public DoubleFunction getFunc() {
         return func;
     }
 

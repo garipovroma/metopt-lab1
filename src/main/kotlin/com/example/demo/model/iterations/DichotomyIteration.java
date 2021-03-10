@@ -1,6 +1,6 @@
 package com.example.demo.model.iterations;
 
-import java.util.function.DoubleFunction;
+import com.example.demo.model.base.DoubleFunction;
 
 public class DichotomyIteration implements OptimizationMethodIteration {
     private final double left;
@@ -11,9 +11,9 @@ public class DichotomyIteration implements OptimizationMethodIteration {
     private final double x2;
     private final double fx1;
     private final double fx2;
-    private final DoubleFunction<Double> func;
+    private final DoubleFunction func;
 
-    public DichotomyIteration(double left, double right, double eps, double delta, DoubleFunction<Double> func) {
+    public DichotomyIteration(double left, double right, double eps, double delta, DoubleFunction func) {
         this.left = left;
         this.right = right;
         this.delta = delta;
@@ -37,8 +37,8 @@ public class DichotomyIteration implements OptimizationMethodIteration {
     @Override
     public DichotomyIteration next() {
         return fx1 <= fx2 ?
-                new DichotomyIteration(left, x2, delta, eps, func) :
-                new DichotomyIteration(x1, right, delta, eps, func);
+                new DichotomyIteration(left, x2, eps, delta, func) :
+                new DichotomyIteration(x1, right, eps, delta, func);
     }
 
     public double getLeft() {
@@ -57,7 +57,7 @@ public class DichotomyIteration implements OptimizationMethodIteration {
         return eps;
     }
 
-    public DoubleFunction<Double> getFunc() {
+    public DoubleFunction getFunc() {
         return func;
     }
 

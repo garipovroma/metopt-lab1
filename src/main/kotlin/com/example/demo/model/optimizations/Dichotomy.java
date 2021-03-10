@@ -1,14 +1,13 @@
 package com.example.demo.model.optimizations;
 
+import com.example.demo.model.base.DoubleFunction;
 import com.example.demo.model.base.Point;
 import com.example.demo.model.iterations.DichotomyIteration;
-
-import java.util.function.DoubleFunction;
 
 public class Dichotomy {
     private DichotomyIteration iteration;
 
-    public Dichotomy(double left, double right, double eps, double delta, DoubleFunction<Double> func) {
+    public Dichotomy(double left, double right, double eps, double delta, DoubleFunction func) {
         this.iteration = new DichotomyIteration(left, right, eps, delta, func);
     }
 

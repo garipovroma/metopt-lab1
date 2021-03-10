@@ -1,14 +1,13 @@
 package com.example.demo.model.optimizations;
 
+import com.example.demo.model.base.DoubleFunction;
 import com.example.demo.model.base.Point;
 import com.example.demo.model.iterations.ParabolaIteration;
-
-import java.util.function.DoubleFunction;
 
 public class Parabola {
     private ParabolaIteration iteration;
 
-    public Parabola(double left, double right, double eps, DoubleFunction<Double> func) {
+    public Parabola(double left, double right, double eps, DoubleFunction func) {
         iteration = new ParabolaIteration(left, right, eps, func);
     }
 

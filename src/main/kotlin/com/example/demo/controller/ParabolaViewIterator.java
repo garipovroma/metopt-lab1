@@ -1,5 +1,6 @@
 package com.example.demo.controller;
 
+import com.example.demo.model.base.BaseGraph;
 import com.example.demo.model.base.Graph;
 import com.example.demo.model.base.Point;
 import com.example.demo.model.iterations.ParabolaIteration;
@@ -25,13 +26,13 @@ public class ParabolaViewIterator extends BaseViewIterator{
         List<Graph> res = new ArrayList<>();
         double left = parabolaIteration.getLeft();
         double right = parabolaIteration.getRight();
-        res.add(new Graph(
+        res.add(new BaseGraph(
                 left,
                 right,
                 100,
                 parabolaIteration.getFunc()
         ));
-        res.add(new Graph(
+        res.add(new BaseGraph(
                 left,
                 right,
                 100,
