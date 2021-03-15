@@ -11,12 +11,14 @@ public class Main {
         DoubleFunction func = value -> -3 * value * Math.sin(value * 0.75) + Math.exp(-2 * value);
 //        Parabola parabola = new Parabola(0, 2 * Math.PI, 1e-8);
 //        System.out.println(parabola.run(false));
-        Dichotomy dichotomy = new Dichotomy(0, 2 * Math.PI, 1e-8, 1e-9);
-        System.out.println(dichotomy.run(true));
+//        Dichotomy dichotomy = new Dichotomy(0, 2 * Math.PI, 1e-8, 1e-9);
+//        System.out.println(dichotomy.run(true));
 //        GoldenRatio goldenRatio = new GoldenRatio(0, 2 * Math.PI, 1e-8);
 //        System.out.println(goldenRatio.run(false));
 //        ParabolaIteration iter = new ParabolaIteration(0, 2 * Math.PI, 1e-8, func);
-        System.out.println(1);
+//        System.out.println(1);
+        GoldenRatio ratio = new GoldenRatio(0, 2 * Math.PI, 1e-3);
+        ratio.run(true);
     }
 }
 
