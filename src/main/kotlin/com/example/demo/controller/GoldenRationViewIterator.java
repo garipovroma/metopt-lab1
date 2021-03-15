@@ -1,6 +1,5 @@
 package com.example.demo.controller;
 
-import com.example.demo.model.base.BaseGraph;
 import com.example.demo.model.base.Graph;
 import com.example.demo.model.base.Point;
 import com.example.demo.model.iterations.GoldenRatioIteration;
@@ -25,11 +24,12 @@ public class GoldenRationViewIterator extends BaseViewIterator {
     public List<Graph> next() {
         List<Graph> res = new ArrayList<>();
         res.add(
-                new BaseGraph(
+                Graph.intervalCount(
                         goldenRatioIteration.getLeft(),
                         goldenRatioIteration.getRight(),
                         100,
-                        goldenRatioIteration.getFunc()
+                        goldenRatioIteration.getFunc(),
+                        null
                 ));
         addSinglePointGraph(res,
                 new Point(
