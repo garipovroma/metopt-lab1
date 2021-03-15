@@ -91,8 +91,7 @@ public class GoldenRatioIteration implements OptimizationMethodIteration {
     }
 
     @Override
-    public String toString() {
-        return "GoldenRatioIteration{" +
+    public String toString() { return "GoldenRatioIteration{" +
                 "left=" + left +
                 ", right=" + right +
                 ", eps=" + eps +
