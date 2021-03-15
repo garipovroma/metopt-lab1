@@ -40,7 +40,6 @@ public class DichotomyIteration implements OptimizationMethodIteration {
                 new DichotomyIteration(left, x2, eps, delta, func) :
                 new DichotomyIteration(x1, right, eps, delta, func);
     }
-
     public double getLeft() {
         return left;
     }

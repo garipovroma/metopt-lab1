@@ -1,9 +1,8 @@
 package com.example.demo.model.iterations;
 
 import com.example.demo.model.base.DoubleFunction;
-import com.example.demo.model.optimizations.GoldenRatio;
 
-public class GoldenRatioIteration implements OptimizationMethodIteration {
+public class FibonacciIteration implements OptimizationMethodIteration {
     private final double left;
     private final double right;
     private final double eps;
@@ -11,20 +10,23 @@ public class GoldenRatioIteration implements OptimizationMethodIteration {
     private final double x2;
     private final double fx1;
     private final double fx2;
-    private final static double compareAccuracy = 1e-8;
+    private final int n;
+    private final int k;
     private final DoubleFunction func;
 
-    public GoldenRatioIteration(double left, double right, double eps, DoubleFunction func) {
-        this(left, right, left + (1.0 - GoldenRatio.tau) * (right - left), left + GoldenRatio.tau * (right - left), 1e18, 1e18, eps, func, 0);
+    public FibonacciIteration(double left, double right, double eps, double x1, double x2, int n, int k, DoubleFunction func) {
+        this(left, right, eps, x1, x2, 1e18, 1e18, n, k, func, 0);
     }
-
-    private GoldenRatioIteration(double left, double right, double x1, double x2, double fx1, double fx2, double eps, DoubleFunction func, int calcLeft) {
+    public FibonacciIteration(double left, double right, double eps, double x1, double x2,
+                              double fx1, double fx2, int n, int k, DoubleFunction func, int calcLeft) {
         this.left = left;
         this.right = right;
         this.eps = eps;
-        this.func = func;
         this.x1 = x1;
         this.x2 = x2;
+        this.n = n;
+        this.k = k;
+        this.func = func;
         if (calcLeft == -1) {
             this.fx1 = func.apply(x1);
             this.fx2 = fx1;
@@ -43,14 +45,14 @@ public class GoldenRatioIteration implements OptimizationMethodIteration {
 
     @Override
     public boolean hasNext() {
-        return ((right - left) > eps * 2.0);
+        return (k < n);
     }
 
     @Override
-    public GoldenRatioIteration next() {
-        return fx1 <= fx2 ?
-                new GoldenRatioIteration(left, x2, x2 - GoldenRatio.tau * (x2 - left), x1, fx1, fx2, eps, func, -1) :
-                new GoldenRatioIteration(x1, right, x2, x1 + GoldenRatio.tau * (right - x1), fx1, fx2, eps, func, 1);
+    public FibonacciIteration next() {
+        return fx1 > fx2 ?
+                new FibonacciIteration(x1, right, eps, x2, right - (x1 - left), fx1, fx2, n, k + 1, func, 1) :
+                new FibonacciIteration(left, x2, eps,left + (right - x2), x1, fx1, fx2, n, k + 1, func, -1);
     }
 
     public double getLeft() {
@@ -81,20 +83,22 @@ public class GoldenRatioIteration implements OptimizationMethodIteration {
         return fx2;
     }
 
-    public static double getCompareAccuracy() {
-        return compareAccuracy;
-    }
-
     public DoubleFunction getFunc() {
         return func;
     }
 
     @Override
     public String toString() {
-        return "GoldenRatioIteration{" +
+        return "FibonacciIteration{" +
                 "left=" + left +
                 ", right=" + right +
                 ", eps=" + eps +
+                ", x1=" + x1 +
+                ", x2=" + x2 +
+                ", fx1=" + fx1 +
+                ", fx2=" + fx2 +
+                ", n=" + n +
+                ", k=" + k +
                 ", func=" + func +
                 '}';
     }
