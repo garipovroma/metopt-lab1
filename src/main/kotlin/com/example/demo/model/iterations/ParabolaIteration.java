@@ -44,6 +44,7 @@ public class ParabolaIteration implements OptimizationMethodIteration {
         return 1;
     }
     private double findInitialPoint(double l, double r) {
+//        double _x2 = 0.620919484213285;
         double _x2;
         Random random = new Random();
         for (int i = 0; i < 1000; i++) {
@@ -128,7 +129,7 @@ public class ParabolaIteration implements OptimizationMethodIteration {
     }
 
     @Override
-    public boolean hasNext() { return isFirst || compareWithEps(prevPMinX, pMinX) == 0; }
+    public boolean hasNext() { return isFirst || !(compareWithEps(prevPMinX, pMinX) == 0); }
 
     @Override
     public ParabolaIteration next() {
