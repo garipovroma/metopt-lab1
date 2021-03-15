@@ -33,6 +33,15 @@
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
+    <orderEntry type="library" name="Maven: org.ejml:ejml-all:0.40" level="project" />
+    <orderEntry type="library" name="Maven: org.ejml:ejml-core:0.40" level="project" />
+    <orderEntry type="library" name="Maven: org.ejml:ejml-fdense:0.40" level="project" />
+    <orderEntry type="library" name="Maven: org.ejml:ejml-ddense:0.40" level="project" />
+    <orderEntry type="library" name="Maven: org.ejml:ejml-cdense:0.40" level="project" />
+    <orderEntry type="library" name="Maven: org.ejml:ejml-zdense:0.40" level="project" />
+    <orderEntry type="library" name="Maven: org.ejml:ejml-dsparse:0.40" level="project" />
+    <orderEntry type="library" name="Maven: org.ejml:ejml-simple:0.40" level="project" />
+    <orderEntry type="library" name="Maven: org.ejml:ejml-fsparse:0.40" level="project" />
     <orderEntry type="library" name="Maven: no.tornado:tornadofx:1.7.17" level="project" />
     <orderEntry type="library" name="Maven: org.glassfish:javax.json:1.1.2" level="project" />
     <orderEntry type="library" name="Maven: javax.json:javax.json-api:1.1.2" level="project" />
