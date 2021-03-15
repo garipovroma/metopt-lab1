@@ -15,7 +15,7 @@ public class DichotomyViewIterator extends BaseViewIterator {
     private final Point extremum;
 
     public DichotomyViewIterator(double left, double right, double eps, double delta) {
-        this.extremum = new Dichotomy(left, right, eps, delta, x -> -3.0 * x * Math.sin(0.75 * x) + Math.exp(-2.0 * x)).run(false);
+        this.extremum = new Dichotomy(left, right, eps, delta, x -> -3.0 * x * Math.sin(0.75 * x) + Math.exp(-2.0 * x)).run(true);
         this.dichotomyIteration = new DichotomyIteration(left, right, eps, delta, x -> -3.0 * x * Math.sin(0.75 * x) + Math.exp(-2.0 * x));
         this.left = dichotomyIteration.getLeft();
         this.right = dichotomyIteration.getRight();

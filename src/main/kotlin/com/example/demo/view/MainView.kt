@@ -126,17 +126,17 @@ class MethodController: Controller() {
         listOf(
             object : ViewFactory {
                 override fun viewIterator() =
-                    DichotomyViewIterator(0.0, Math.PI * 2.0, 1e-5, 1e-5)
+                    DichotomyViewIterator(0.0, Math.PI * 2.0, 1e-3, 1e-5)
                 override fun toString(): String = "Dichotomy"
             },
             object : ViewFactory {
                 override fun viewIterator() =
-                    GoldenRationViewIterator(0.0, Math.PI * 2.0, 1e-5, 1e-5)
+                    GoldenRationViewIterator(0.0, Math.PI * 2.0, 1e-3, 1e-5)
                 override fun toString(): String = "Golden Ration"
             },
             object : ViewFactory {
                 override fun viewIterator() =
-                    ParabolaViewIterator(0.0, Math.PI * 2.0, 1e-5)
+                    ParabolaViewIterator(0.0, Math.PI * 2.0, 1e-3)
                 override fun toString(): String = "Parabola"
             }
         )

@@ -16,6 +16,10 @@ public class GoldenRatio {
 
     public Point run(boolean print) {
         if (print) {
+            if (print) {
+                System.out.println("$l$ & $r$ & $x_1$ & $x_2$ & $fx_1$ & $fx_2$ \\\\");
+                System.out.println(iteration);
+            }
             System.out.println(iteration);
         }
         while (iteration.hasNext()) {
@@ -26,6 +30,9 @@ public class GoldenRatio {
         }
         double x = (iteration.getLeft() + iteration.getRight()) / 2.0;
         double y = (iteration.getFunc().apply(x));
+        if (print) {
+            System.out.format("extremumX=%.4f extremumY=%.4f\n", x, y);
+        }
         return new Point(x, y);
     }
 }
