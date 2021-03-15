@@ -19,5 +19,6 @@ public class Main {
 //        GoldenRatio goldenRatio = new GoldenRatio(0, 2 * Math.PI, 1e-8);
 //        System.out.println(goldenRatio.run(false));
 //        ParabolaIteration iter = new ParabolaIteration(0, 2 * Math.PI, 1e-8, func);
+        System.out.println(new Parabola(0, 2 * Math.PI, 1e-4, func).run(true));
     }
 }

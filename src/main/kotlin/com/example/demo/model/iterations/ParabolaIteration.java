@@ -8,6 +8,7 @@ import org.ejml.simple.SimpleMatrix;
 import java.util.Random;
 
 public class ParabolaIteration extends AbstractMethodIteration {
+    private final static int initialPointSearchSteps = 100;
     private final double left;
     private final double right;
     private final double eps;
@@ -45,12 +46,18 @@ public class ParabolaIteration extends AbstractMethodIteration {
         return 1;
     }
     private double findInitialPoint(double l, double r, double fx1, double fx3) {
-//        double _x2 =
         double _x2;
 
-        Random random = new Random();
+        /*Random random = new Random();
         for (int i = 0; i < 1000; i++) {
             _x2 = random.nextDouble() * (r - l) + l;
+            double _f2 = apply(_x2);
+            if (compare(_f2, fx1) <= 0 && compare(_f2, fx3) <= 0) {
+                return _x2;
+            }
+        }*/
+        for (int i = 0; i < initialPointSearchSteps; i++) {
+           _x2 =  l + ((r - l) / initialPointSearchSteps) * (i + 1);
             double _f2 = apply(_x2);
             if (compare(_f2, fx1) <= 0 && compare(_f2, fx3) <= 0) {
                 return _x2;
