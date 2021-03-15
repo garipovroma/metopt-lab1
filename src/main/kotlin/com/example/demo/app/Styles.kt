@@ -1,5 +1,6 @@
 package com.example.demo.app
 
+import javafx.scene.paint.Color
 import javafx.scene.text.FontWeight
 import tornadofx.*
 
@@ -25,8 +26,9 @@ class Styles : Stylesheet() {
             endMargin = 4.px
             startMargin = 4.px
         }
-//        chartLineSymbol {
-//            padding = box(1.px)
-//        }
+        chartLineSymbol {
+            padding = box(5.px)
+            stroke = Color.BLACK
+        }
     }
 }
