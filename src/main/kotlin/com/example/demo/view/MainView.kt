@@ -6,9 +6,6 @@ import com.example.demo.model.base.Graph
 import com.example.demo.model.base.Point
 import javafx.scene.chart.LineChart
 import javafx.scene.chart.NumberAxis
-import javafx.scene.paint.Color
-import javafx.scene.shape.Circle
-import javafx.scene.shape.Rectangle
 import tornadofx.*
 import java.util.*
 
@@ -21,25 +18,16 @@ class MainView : View("huy TornadoFX") {
     var iterator: ViewIterator? = null
 
     fun getChart(graphs: List<Graph>): LineChart<Number, Number>.() -> Unit = {
-        graphs.map {
+        graphs.map { graph ->
             animated = false
-            if (it.points.size == 1) {
-                val ser = series(it.toString()) {
-                    val point = it.points[0]
-                    val chartData = data(point.x, point.y)
+            val series = series(graph.toString()) {
+                graph.points.forEach {
+                    data(it.x, it.y)
                 }
-                ser.data.forEach {
-                    it.node.lookup(".chart-line-symbol").style = "-fx-padding: 5px;"
-                }
-            } else {
-                val ser = series(it.toString()) {
-                    it.points.forEach {
-                        data(it.x, it.y)
-                    }
-                }
-                ser.data.forEach {
-                    it.node.lookup(".chart-line-symbol").style = "-fx-padding: 1px;"
-                }
+            }
+            series.data.forEach {
+                it.node.lookup(".chart-line-symbol").style =
+                    if (graph.points.size == 1) "-fx-padding: 6px;" else "-fx-padding: 1px;"
             }
         }
     }
@@ -77,7 +65,7 @@ class MainView : View("huy TornadoFX") {
         }
         lowerBound = left
         upperBound = right
-        tickUnit = (right - left) / 10.0
+        tickUnit = (right - left) / 100.0
     }
 
     private fun assignAxis(axis: NumberAxis, otherAxis: NumberAxis): Unit {
