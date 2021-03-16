@@ -26,9 +26,5 @@ class Styles : Stylesheet() {
             endMargin = 4.px
             startMargin = 4.px
         }
-        chartLineSymbol {
-            padding = box(5.px)
-            stroke = Color.BLACK
-        }
     }
 }

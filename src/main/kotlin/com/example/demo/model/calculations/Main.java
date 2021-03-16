@@ -15,7 +15,12 @@ public class Main {
 //        System.out.println(parabola.run(false));
         Dichotomy dichotomy = new Dichotomy(0, 2 * Math.PI, 1e-8, 1e-9);
 //        System.out.println(dichotomy.run(true));
-        System.out.println(OptimizationMethodRunner.run(new ParabolaIteration(0, 2 * Math.PI, 1e-3, func), true));
+        System.out.println(
+            OptimizationMethodRunner.run(
+                new ParabolaIteration(0, 2 * Math.PI, 1e-3, func),
+                true
+            )
+        );
 //        GoldenRatio goldenRatio = new GoldenRatio(0, 2 * Math.PI, 1e-8);
 //        System.out.println(goldenRatio.run(false));
 //        ParabolaIteration iter = new ParabolaIteration(0, 2 * Math.PI, 1e-8, func);

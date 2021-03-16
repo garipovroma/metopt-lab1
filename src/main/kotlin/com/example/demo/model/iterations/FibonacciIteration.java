@@ -4,6 +4,7 @@ import com.example.demo.model.base.DoubleFunction;
 import com.example.demo.model.base.Point;
 
 public class FibonacciIteration implements OptimizationMethodIteration {
+    private static final double INFINITY = 1e18;
     private final double left;
     private final double right;
     private final double eps;
@@ -16,7 +17,7 @@ public class FibonacciIteration implements OptimizationMethodIteration {
     private final DoubleFunction func;
 
     public FibonacciIteration(double left, double right, double eps, double x1, double x2, int n, int k, DoubleFunction func) {
-        this(left, right, eps, x1, x2, 1e18, 1e18, n, k, func, 0);
+        this(left, right, eps, x1, x2, INFINITY, INFINITY, n, k, func, 0);
     }
     public FibonacciIteration(double left, double right, double eps, double x1, double x2,
                               double fx1, double fx2, int n, int k, DoubleFunction func, int calcLeft) {

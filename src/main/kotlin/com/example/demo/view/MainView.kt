@@ -26,15 +26,22 @@ class MainView : View("huy TornadoFX") {
     fun getChart(graphs: List<Graph>): LineChart<Number, Number>.() -> Unit = {
         graphs.map {
             animated = false
-            series(it.toString()) {
-                if (it.points.size == 1) {
+            if (it.points.size == 1) {
+                val ser = series(it.toString()) {
                     val point = it.points[0]
                     val chartData = data(point.x, point.y)
-                    chartData.node = Circle(5.0)
-                } else {
+                }
+                ser.data.forEach {
+                    it.node.lookup(".chart-line-symbol").style = "-fx-padding: 5px;"
+                }
+            } else {
+                val ser = series(it.toString()) {
                     it.points.forEach {
-                        data(it.x, it.y).node = Rectangle(0.0, 0.0)
+                        data(it.x, it.y)
                     }
+                }
+                ser.data.forEach {
+                    it.node.lookup(".chart-line-symbol").style = "-fx-padding: 1px;"
                 }
             }
         }
@@ -131,7 +138,7 @@ class MethodController: Controller() {
             },
             object : ViewFactory {
                 override fun viewIterator() =
-                    GoldenRationViewIterator(0.0, Math.PI * 2.0, 1e-3, 1e-5)
+                    GoldenRationViewIterator(0.0, Math.PI * 2.0, 1e-3)
                 override fun toString(): String = "Golden Ration"
             },
             object : ViewFactory {

@@ -4,6 +4,7 @@ import com.example.demo.model.base.DoubleFunction;
 import com.example.demo.model.base.Point;
 import com.example.demo.model.iterations.DichotomyIteration;
 
+@Deprecated
 public class Dichotomy {
     private DichotomyIteration iteration;
 
