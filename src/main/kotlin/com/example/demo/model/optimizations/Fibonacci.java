@@ -15,7 +15,7 @@ public class Fibonacci {
         double x1 = left + fib(n) / fib(n + 2) * (right - left);
         double x2 = left + fib(n + 1) / fib(n + 2) * (right - left);
         iteration = new FibonacciIteration(left, right, eps,
-                x1, x2, n, 0, func);
+                x1, x2, func.apply(x1), func.apply(x2), n, 0,func, 0, left, right);
     }
     public Fibonacci(double left, double right, double eps) {
         this(left, right, eps, x -> -3.0 * x * Math.sin(0.75 * x) + Math.exp(-2.0 * x));

@@ -10,8 +10,8 @@ import com.example.demo.model.optimizations.Parabola;
 public class Main {
     public static void main(String[] args) {
         DoubleFunction func = value -> -3 * value * Math.sin(value * 0.75) + Math.exp(-2 * value);
-        Parabola parabola = new Parabola(0, 2 * Math.PI, 1e-8);
-//        System.out.println(parabola.run(false));
+    //    Parabola parabola = new Parabola(0, 2 * Math.PI, 1e-8);
+  //      System.out.println(parabola.run(true));
         Dichotomy dichotomy = new Dichotomy(0, 2 * Math.PI, 1e-8, 1e-9);
         //System.out.println(dichotomy.run(true));
         GoldenRatio goldenRatio = new GoldenRatio(0, 2 * Math.PI, 1e-8);

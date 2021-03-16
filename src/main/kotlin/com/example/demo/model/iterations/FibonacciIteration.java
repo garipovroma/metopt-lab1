@@ -2,6 +2,9 @@ package com.example.demo.model.iterations;
 
 import com.example.demo.model.base.DoubleFunction;
 
+import static com.example.demo.model.base.FibonacciCalculator.calculateIterationsCount;
+import static com.example.demo.model.base.FibonacciCalculator.fib;
+
 public class FibonacciIteration implements OptimizationMethodIteration {
     private final double left;
     private final double right;
@@ -13,12 +16,12 @@ public class FibonacciIteration implements OptimizationMethodIteration {
     private final int n;
     private final int k;
     private final DoubleFunction func;
+    private final double initial_right;
+    private final double initial_left;
 
-    public FibonacciIteration(double left, double right, double eps, double x1, double x2, int n, int k, DoubleFunction func) {
-        this(left, right, eps, x1, x2, 1e18, 1e18, n, k, func, 0);
-    }
     public FibonacciIteration(double left, double right, double eps, double x1, double x2,
-                              double fx1, double fx2, int n, int k, DoubleFunction func, int calcLeft) {
+                              double fx1, double fx2, int n, int k, DoubleFunction func, int calcLeft,
+                              double initial_left, double initial_right) {
         this.left = left;
         this.right = right;
         this.eps = eps;
@@ -28,15 +31,17 @@ public class FibonacciIteration implements OptimizationMethodIteration {
         this.k = k;
         this.func = func;
         if (calcLeft == -1) {
-            this.fx1 = func.apply(x1);
-            this.fx2 = fx1;
-        } else if (calcLeft == 1) {
             this.fx1 = fx2;
-            this.fx2 = func.apply(x2);
+            this.fx2 = f(x2);
+        } else if (calcLeft == 1) {
+            this.fx1 = f(x1);
+            this.fx2 = fx1;
         } else {
-            this.fx1 = func.apply(x1);
-            this.fx2 = func.apply(x2);
+            this.fx1 = f(x1);
+            this.fx2 = f(x2);
         }
+        this.initial_left = initial_left;
+        this.initial_right = initial_right;
     }
 
     private double f(double x) {
@@ -51,8 +56,14 @@ public class FibonacciIteration implements OptimizationMethodIteration {
     @Override
     public FibonacciIteration next() {
         return fx1 > fx2 ?
-                new FibonacciIteration(x1, right, eps, x2, right - (x1 - left), fx1, fx2, n, k + 1, func, 1) :
-                new FibonacciIteration(left, x2, eps,left + (right - x2), x1, fx1, fx2, n, k + 1, func, -1);
+                new FibonacciIteration(x1, right, eps,
+                        left + fib(n - k + 1) / fib(n + 2) * (initial_right - initial_left),
+                        left + fib(n - k + 2) / fib(n + 2) * (initial_right - initial_left),
+                        fx1, fx2, n, k + 1, func, 1, initial_left, initial_right) :
+                new FibonacciIteration(left, x2, eps,
+                        left + fib(n - k + 1) / fib(n + 2) * (initial_right - initial_left),
+                        left + fib(n - k + 2) / fib(n + 2) * (initial_right - initial_left),
+                        fx1, fx2, n, k + 1, func, -1, initial_left, initial_right);
     }
 
     public double getLeft() {
