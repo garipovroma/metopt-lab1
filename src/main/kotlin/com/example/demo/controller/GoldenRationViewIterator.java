@@ -16,7 +16,7 @@ public class GoldenRationViewIterator extends BaseViewIterator {
 
     public GoldenRationViewIterator(double left, double right, double eps) {
         this.goldenRatioIteration = new GoldenRatioIteration(left, right, eps, x -> -3.0 * x * Math.sin(0.75 * x) + Math.exp(-2.0 * x));
-        this.extremum = OptimizationMethodRunner.run(goldenRatioIteration, false);
+        this.extremum = OptimizationMethodRunner.run(goldenRatioIteration, false).getExtremum();
     }
 
     public boolean hasNext() {

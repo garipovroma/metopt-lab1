@@ -22,13 +22,14 @@ public class Main {
 //        System.out.format("%.4f %.4f", result.getX(), result.getY());
 
         // Statistics
-        double[] eps = new double[]{1e-3, 1e-4, 1e-5, 1e-6, 1e-7, 1e-8, 1e-9};
+        double[] eps = new double[]{1e-1, 1e-2, 1e-3, 1e-4, 1e-5, 1e-6, 1e-7, 1e-8, 1e-9};
+
         System.out.println("eps: " + Arrays.toString(eps));
 
         System.out.print("Dichotomy ");
         for (double x : eps) {
             DoubleFunctionCounter func = new DoubleFunctionCounter();
-            OptimizationMethodRunner.run(new DichotomyIteration(0, 2 * Math.PI, x, 1e-5, func), false);
+            OptimizationMethodRunner.run(new DichotomyIteration(0, 2 * Math.PI, x, x / 4 + x * x / 10, func), false);
             System.out.print(func.count + " ");
         }
         System.out.println();
@@ -48,7 +49,6 @@ public class Main {
             System.out.print(func.count + " ");
         }
         System.out.println();
-
         System.out.print("Parabola ");
         for (double x : eps) {
             DoubleFunctionCounter func = new DoubleFunctionCounter();
