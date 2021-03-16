@@ -162,6 +162,7 @@ public class ParabolaIteration extends AbstractMethodIteration {
             }
         }
         return new ParabolaIteration(false, nx1, nx3, nx1, nx2, nx3, nfx1, nfx2, nfx3, eps, function, pMinX);
+//        return new ParabolaIteration(false, left, right, nx1, nx2, nx3, nfx1, nfx2, nfx3, eps, function, pMinX);
     }
 
     public double getLeft() {
@@ -190,7 +191,7 @@ public class ParabolaIteration extends AbstractMethodIteration {
 
     @Override
     public String toString() {
-        return "ParabolaIteration{" +
+        /*return "ParabolaIteration{" +
                 "left=" + left +
                 ", right=" + right +
                 ", eps=" + eps +
@@ -205,7 +206,8 @@ public class ParabolaIteration extends AbstractMethodIteration {
                 ", approximationParabola=" + approximationParabola +
                 ", isFirst=" + isFirst +
                 ", func=" + function +
-                '}';
+                '}';*/
+        return String.format("%.4f & %.4f & %.4f & %.4f & %.4f & %.4f & %.4f & %.4f \\\\\n\\hline", x1, x2, x3, fx1, fx2, fx3, pMinX, pMinY);
     }
 
     @Override

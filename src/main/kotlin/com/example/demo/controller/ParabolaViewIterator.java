@@ -14,6 +14,7 @@ public class ParabolaViewIterator extends BaseViewIterator{
     private final double right;
     public ParabolaViewIterator(double left, double right, double eps) {
         this.extremum = new Point(1.0, 1.0);
+        // :TODO: assign smth
         this.left = left;
         this.right = right;
         this.parabolaIteration = new ParabolaIteration(left, right, eps, x -> -3.0 * x * Math.sin(0.75 * x) + Math.exp(-2.0 * x));
