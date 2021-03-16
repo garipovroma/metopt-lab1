@@ -15,15 +15,26 @@ public class ParabolaIteration extends AbstractMethodIteration {
     private final double fx2;
     private final double fx3;
     private final double pMinX;
-    private final double pMinY;
+    private final double fOfMinX;
     private final DoubleFunction approximationParabola;
     private final boolean isFirst;
     private final double prevPMinX;
 
-    private double findParabolaMinX() {
+    public static Point findParabolaMin(double x1, double x2, double x3, double fx1, double fx2, double fx3,
+                                        DoubleFunction func, /*TODO: remove it after stat calcs!!*/ boolean eug) {
         double a1 = (fx2 - fx1) / (x2 - x1),
                 a2 = ( (fx3 - fx1) / (x3 - x1) - (fx2 - fx1) / (x2 - x1) ) / (x3 - x2);
-        return (x1 + x2 - a1 / a2) / 2;
+        DoubleFunction parabola = findApproximationParabola(x1, x2, x3, fx1, fx2, fx3).toDoubleFunction();
+        double x = (x1 + x2 - a1 / a2) / 2;
+        double y = func.apply(x);
+        if (eug && func instanceof DoubleFunctionCounter) {
+            ((DoubleFunctionCounter) func).count--;
+        }
+        return new Point(x, y);
+    }
+
+    private Point findParabolaMin() {
+        return findParabolaMin(x1, x2, x3, fx1, fx2, fx3, function, false);
     }
 
     private static int compare(double x, double y) {
@@ -60,8 +71,8 @@ public class ParabolaIteration extends AbstractMethodIteration {
         return pMinX;
     }
 
-    public double getpMinY() {
-        return pMinY;
+    public double getFofMinX() {
+        return fOfMinX;
     }
 
     private static class Parabola {
@@ -91,8 +102,9 @@ public class ParabolaIteration extends AbstractMethodIteration {
         this.x2 = findInitialPoint(left, right, fx1, fx3);
         this.fx2 = apply(x2);
         Parabola parabola = findApproximationParabola();
-        this.pMinX = findParabolaMinX();
-        this.pMinY = apply(pMinX);
+        Point pMin = findParabolaMin();
+        this.pMinX = pMin.getX();
+        this.fOfMinX = pMin.getY();
         this.approximationParabola = parabola.toDoubleFunction();
         this.prevPMinX = Double.NaN;
     }
@@ -110,35 +122,21 @@ public class ParabolaIteration extends AbstractMethodIteration {
         this.isFirst = isFirst;
         this.eps = eps;
         Parabola parabola = findApproximationParabola();
-        this.pMinX = findParabolaMinX();
-        this.pMinY = apply(pMinX);
+        Point pMin = findParabolaMin();
+        this.pMinX = pMin.getX();
+        this.fOfMinX = pMin.getY();
         this.approximationParabola = parabola.toDoubleFunction();
         this.prevPMinX = prevPMinX;
     }
 
-    /*private DoubleFunction findApproximationParabola() {
-        SimpleMatrix equation = new SimpleMatrix(
-                new DMatrixRMaj(
-                        new double[][]{
-                                {x1 * x1, x1, 1},
-                                {x2 * x2, x2, 1},
-                                {x3 * x3, x3, 1}
-                        }));
-        SimpleMatrix solution = equation.solve(new SimpleMatrix(new DMatrixRMaj(new double[][]{
-                {fx1},
-                {fx2},
-                {fx3}
-        })));
-        double coefficientA = solution.get(0, 0);
-        double coefficientB = solution.get(1, 0);
-        double coefficientC = solution.get(2, 0);
-        return (x -> coefficientA * x * x + coefficientB * x + coefficientC);
-    }*/
-
-    private Parabola findApproximationParabola() {
+    public static Parabola findApproximationParabola(double x1, double x2, double x3, double fx1, double fx2, double fx3) {
         double a0 = fx1, a1 = (fx2 - fx1) / (x2 - x1),
                 a2 = ( (fx3 - fx1) / (x3 - x1) - (fx2 - fx1) / (x2 - x1) ) / (x3 - x2);
         return new Parabola(a2, a1 + a2 * (-x2) + a2 * (-x1), a0 + a1 * (-x1) + a2 * (-x1) * (-x2));
+    }
+
+    private Parabola findApproximationParabola() {
+        return findApproximationParabola(x1, x2, x3, fx1, fx2, fx3);
     }
 
     @Override
@@ -149,24 +147,24 @@ public class ParabolaIteration extends AbstractMethodIteration {
         double nx1 = x1, nx2 = x2, nx3 = x3;
         double nfx1 = fx1, nfx2 = fx2, nfx3 = fx3;
         if (compare(x1, pMinX) <= 0 && compare(pMinX, x2) < 0) { // x1 <= pMinX < x2
-            if (compare(pMinY, fx2) >= 0) { // pMin >= f(x2)
+            if (compare(fOfMinX, fx2) >= 0) { // pMin >= f(x2)
                 nx1 = pMinX;
-                nfx1 = pMinY;
+                nfx1 = fOfMinX;
             } else { // pMin < f(x2)
                 nx3 = x2;
                 nfx3 = fx2;
                 nx2 = pMinX;
-                nfx2 = pMinY;
+                nfx2 = fOfMinX;
             }
         } else if (compare(x2, pMinX) <= 0 && compare(pMinX, x3) <= 0) { // x2 <= pMinX <= x3
-            if (compare(fx2, pMinY) >= 0) { // f(x2) >= pMin
+            if (compare(fx2, fOfMinX) >= 0) { // f(x2) >= pMin
                 nx1 = x2;
                 nfx1 = fx2;
                 nx2 = pMinX;
-                nfx2 = pMinY;
+                nfx2 = fOfMinX;
             } else { // f(x2) < pMin
                 nx3 = pMinX;
-                nfx3 = pMinY;
+                nfx3 = fOfMinX;
             }
         }
         return new ParabolaIteration(false, nx1, nx3, nx1, nx2, nx3, nfx1, nfx2, nfx3, eps, function, pMinX);
@@ -215,11 +213,11 @@ public class ParabolaIteration extends AbstractMethodIteration {
                 ", isFirst=" + isFirst +
                 ", func=" + function +
                 '}';*/
-        return String.format("%.4f & %.4f & %.4f & %.4f & %.4f & %.4f & %.4f & %.4f \\\\\n\\hline", x1, x2, x3, fx1, fx2, fx3, pMinX, pMinY);
+        return String.format("%.4f & %.4f & %.4f & %.4f & %.4f & %.4f & %.4f & %.4f \\\\\n\\hline", x1, x2, x3, fx1, fx2, fx3, pMinX, fOfMinX);
     }
 
     @Override
     protected Point getExtremumImpl() {
-        return new Point(getpMinX(), getpMinY());
+        return new Point(getpMinX(), getFofMinX());
     }
 }
