@@ -1,9 +1,10 @@
 package com.example.demo.model.iterations;
 
 import com.example.demo.model.base.DoubleFunction;
-import com.example.demo.model.optimizations.GoldenRatio;
+import com.example.demo.model.base.Point;
 
-public class GoldenRatioIteration implements OptimizationMethodIteration {
+public class GoldenRatioIteration extends AbstractMethodIteration {
+    public final static double TAU = (Math.sqrt(5.0) - 1.0) / 2.0;
     private final double left;
     private final double right;
     private final double eps;
@@ -11,18 +12,16 @@ public class GoldenRatioIteration implements OptimizationMethodIteration {
     private final double x2;
     private final double fx1;
     private final double fx2;
-    private final static double compareAccuracy = 1e-8;
-    private final DoubleFunction func;
 
     public GoldenRatioIteration(double left, double right, double eps, DoubleFunction func) {
-        this(left, right, left + (1.0 - GoldenRatio.tau) * (right - left), left + GoldenRatio.tau * (right - left), 1e18, 1e18, eps, func, 0);
+        this(left, right, left + (1.0 - TAU) * (right - left), left + TAU * (right - left), 0, 0, eps, func, 0);
     }
 
     private GoldenRatioIteration(double left, double right, double x1, double x2, double fx1, double fx2, double eps, DoubleFunction func, int calcLeft) {
+        super(func);
         this.left = left;
         this.right = right;
         this.eps = eps;
-        this.func = func;
         this.x1 = x1;
         this.x2 = x2;
         if (calcLeft == -1) {
@@ -37,10 +36,6 @@ public class GoldenRatioIteration implements OptimizationMethodIteration {
         }
     }
 
-    private double f(double x) {
-        return func.apply(x);
-    }
-
     @Override
     public boolean hasNext() {
         return ((right - left) > eps * 2.0);
@@ -49,8 +44,14 @@ public class GoldenRatioIteration implements OptimizationMethodIteration {
     @Override
     public GoldenRatioIteration next() {
         return fx1 <= fx2 ?
-                new GoldenRatioIteration(left, x2, x2 - GoldenRatio.tau * (x2 - left), x1, fx1, fx2, eps, func, -1) :
-                new GoldenRatioIteration(x1, right, x2, x1 + GoldenRatio.tau * (right - x1), fx1, fx2, eps, func, 1);
+            new GoldenRatioIteration(left, x2, x2 - TAU * (x2 - left), x1, fx1, fx2, eps, function, -1) :
+            new GoldenRatioIteration(x1, right, x2, x1 + TAU * (right - x1), fx1, fx2, eps, function, 1);
+
+    }
+
+    public Point getExtremumImpl() {
+        double x = (left + right) / 2.0;
+        return new Point(x, apply(x));
     }
 
     public double getLeft() {
@@ -81,12 +82,8 @@ public class GoldenRatioIteration implements OptimizationMethodIteration {
         return fx2;
     }
 
-    public static double getCompareAccuracy() {
-        return compareAccuracy;
-    }
-
     public DoubleFunction getFunc() {
-        return func;
+        return function;
     }
 
     @Override

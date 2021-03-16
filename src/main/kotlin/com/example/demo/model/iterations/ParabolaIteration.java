@@ -1,12 +1,14 @@
 package com.example.demo.model.iterations;
 
 import com.example.demo.model.base.DoubleFunction;
+import com.example.demo.model.base.Point;
 import org.ejml.data.DMatrixRMaj;
 import org.ejml.simple.SimpleMatrix;
 
 import java.util.Random;
 
-public class ParabolaIteration implements OptimizationMethodIteration {
+public class ParabolaIteration extends AbstractMethodIteration {
+    private final static int initialPointSearchSteps = 100;
     private final double left;
     private final double right;
     private final double eps;
@@ -22,16 +24,16 @@ public class ParabolaIteration implements OptimizationMethodIteration {
     private final boolean isFirst;
     private final double prevPMinX;
 
-    private final DoubleFunction func;
-
     private double findParabolaMinX() {
         double a0 = fx1, a1 = (fx2 - fx1) / (x2 - x1),
                 a2 = ( (x3 - fx1) / (x3 - x1) - (fx2 - fx1) / (x2 - x1) ) / (x3 - x2);
         return (x1 + x2 - a1 / a2) / 2;
     }
-    private int compare(double x, double y) {
+
+    private static int compare(double x, double y) {
         return Double.compare(x, y);
     }
+
     private int compareWithEps(double x, double y) {
         if (Math.abs(x - y) < eps) {
             return 0;
@@ -43,12 +45,20 @@ public class ParabolaIteration implements OptimizationMethodIteration {
         }
         return 1;
     }
-    private double findInitialPoint(double l, double r) {
+    private double findInitialPoint(double l, double r, double fx1, double fx3) {
         double _x2;
-        Random random = new Random();
+
+        /*Random random = new Random();
         for (int i = 0; i < 1000; i++) {
             _x2 = random.nextDouble() * (r - l) + l;
-            double _f2 = f(_x2);
+            double _f2 = apply(_x2);
+            if (compare(_f2, fx1) <= 0 && compare(_f2, fx3) <= 0) {
+                return _x2;
+            }
+        }*/
+        for (int i = 0; i < initialPointSearchSteps; i++) {
+           _x2 =  l + ((r - l) / initialPointSearchSteps) * (i + 1);
+            double _f2 = apply(_x2);
             if (compare(_f2, fx1) <= 0 && compare(_f2, fx3) <= 0) {
                 return _x2;
             }
@@ -69,24 +79,25 @@ public class ParabolaIteration implements OptimizationMethodIteration {
     }
 
     public ParabolaIteration(double left, double right, double eps, DoubleFunction func) {
+        super(func);
         this.isFirst = true;
         this.left = left;
         this.right = right;
         this.eps = eps;
-        this.func = func;
         this.x1 = left;
         this.x3 = right;
-        this.fx1 = f(x1);
-        this.fx3 = f(x3);
-        this.x2 = findInitialPoint(left, right);
-        this.fx2 = f(x2);
+        this.fx1 = apply(x1);
+        this.fx3 = apply(x3);
+        this.x2 = findInitialPoint(left, right, fx1, fx3);
+        this.fx2 = apply(x2);
         this.pMinX = findParabolaMinX();
-        this.pMinY = f(pMinX);
+        this.pMinY = apply(pMinX);
         this.approximationParabola = findApproximationParabola();
         this.prevPMinX = Double.NaN;
     }
 
-    private ParabolaIteration(double left, double right, double x1, double x2, double x3, double fx1, double fx2, double fx3, double eps, DoubleFunction func, double prevPMinX) {
+    private ParabolaIteration(boolean isFirst, double left, double right, double x1, double x2, double x3, double fx1, double fx2, double fx3, double eps, DoubleFunction func, double prevPMinX) {
+        super(func);
         this.left = left;
         this.right = right;
         this.x1 = x1;
@@ -95,11 +106,10 @@ public class ParabolaIteration implements OptimizationMethodIteration {
         this.fx1 = fx1;
         this.fx2 = fx2;
         this.fx3 = fx3;
-        this.func = func;
-        this.isFirst = false;
+        this.isFirst = isFirst;
         this.eps = eps;
         this.pMinX = findParabolaMinX();
-        this.pMinY = f(pMinX);
+        this.pMinY = apply(pMinX);
         this.approximationParabola = findApproximationParabola();
         this.prevPMinX = prevPMinX;
     }
@@ -123,12 +133,8 @@ public class ParabolaIteration implements OptimizationMethodIteration {
         return (x -> coefficientA * x * x + coefficientB * x + coefficientC);
     }
 
-    private double f(double x) {
-        return func.apply(x);
-    }
-
     @Override
-    public boolean hasNext() { return isFirst || compareWithEps(prevPMinX, pMinX) == 0; }
+    public boolean hasNext() { return isFirst || compareWithEps(prevPMinX, pMinX) != 0; }
 
     @Override
     public ParabolaIteration next() {
@@ -155,7 +161,7 @@ public class ParabolaIteration implements OptimizationMethodIteration {
                 nfx3 = pMinY;
             }
         }
-        return new ParabolaIteration(nx1, nx3, nx1, nx2, nx3, nfx1, nfx2, nfx3, eps, func, pMinX);
+        return new ParabolaIteration(false, nx1, nx3, nx1, nx2, nx3, nfx1, nfx2, nfx3, eps, function, pMinX);
     }
 
     public double getLeft() {
@@ -171,7 +177,7 @@ public class ParabolaIteration implements OptimizationMethodIteration {
     }
 
     public DoubleFunction getFunc() {
-        return func;
+        return function;
     }
 
     public double getX1() {
@@ -181,7 +187,6 @@ public class ParabolaIteration implements OptimizationMethodIteration {
     public double getX2() {
         return x2;
     }
-
 
     @Override
     public String toString() {
@@ -199,7 +204,12 @@ public class ParabolaIteration implements OptimizationMethodIteration {
                 ", pMinY=" + pMinY +
                 ", approximationParabola=" + approximationParabola +
                 ", isFirst=" + isFirst +
-                ", func=" + func +
+                ", func=" + function +
                 '}';
+    }
+
+    @Override
+    protected Point getExtremumImpl() {
+        return new Point(getpMinX(), getpMinY());
     }
 }

@@ -1,6 +1,5 @@
 package com.example.demo.controller;
 
-import com.example.demo.model.base.BaseGraph;
 import com.example.demo.model.base.Graph;
 import com.example.demo.model.base.Point;
 import com.example.demo.model.iterations.DichotomyIteration;
@@ -11,8 +10,8 @@ import java.util.List;
 
 public class DichotomyViewIterator extends BaseViewIterator {
     private DichotomyIteration dichotomyIteration;
-    private final double left;
-    private final double right;
+    private double left;
+    private double right;
     private final Point extremum;
 
     public DichotomyViewIterator(double left, double right, double eps, double delta) {
@@ -28,26 +27,26 @@ public class DichotomyViewIterator extends BaseViewIterator {
 
     public List<Graph> next() {
         List<Graph> res = new ArrayList<>();
+        double offset = Math.max(right - extremum.getX(), extremum.getX() - left);
         res.add(
-            new BaseGraph(
-//                dichotomyIteration.getLeft(),
-//                dichotomyIteration.getRight(),
-                left,
-                right,
+            Graph.intervalCount(
+                extremum.getX() - offset,
+                extremum.getX() + offset,
                 100,
-                dichotomyIteration.getFunc()
-            ).withMessage("function"));
+                dichotomyIteration.getFunc(),
+                "function"
+            ));
         addSinglePointGraph(res,
             new Point(
-                dichotomyIteration.getX1(),
-                dichotomyIteration.getFunc().apply(dichotomyIteration.getX1())
+                left,
+                dichotomyIteration.getFunc().apply(left)
             ),
             "left"
         );
         addSinglePointGraph(res,
             new Point(
-                dichotomyIteration.getX2(),
-                dichotomyIteration.getFunc().apply(dichotomyIteration.getX2())
+                right,
+                dichotomyIteration.getFunc().apply(right)
             ),
             "right"
         );
@@ -59,6 +58,8 @@ public class DichotomyViewIterator extends BaseViewIterator {
 //        );
         addSinglePointGraph(res, extremum, "extremum");
         dichotomyIteration = dichotomyIteration.next();
+        left = dichotomyIteration.getLeft();
+        right = dichotomyIteration.getRight();
         return res;
     }
 

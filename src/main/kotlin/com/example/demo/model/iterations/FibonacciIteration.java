@@ -1,6 +1,7 @@
 package com.example.demo.model.iterations;
 
 import com.example.demo.model.base.DoubleFunction;
+import com.example.demo.model.base.Point;
 
 import static com.example.demo.model.base.FibonacciCalculator.calculateIterationsCount;
 import static com.example.demo.model.base.FibonacciCalculator.fib;
@@ -56,6 +57,7 @@ public class FibonacciIteration implements OptimizationMethodIteration {
     @Override
     public FibonacciIteration next() {
         return fx1 > fx2 ?
+<<<<<<< HEAD
                 new FibonacciIteration(x1, right, eps,
                         left + fib(n - k + 1) / fib(n + 2) * (initial_right - initial_left),
                         left + fib(n - k + 2) / fib(n + 2) * (initial_right - initial_left),
@@ -64,6 +66,15 @@ public class FibonacciIteration implements OptimizationMethodIteration {
                         left + fib(n - k + 1) / fib(n + 2) * (initial_right - initial_left),
                         left + fib(n - k + 2) / fib(n + 2) * (initial_right - initial_left),
                         fx1, fx2, n, k + 1, func, -1, initial_left, initial_right);
+=======
+            new FibonacciIteration(x1, right, eps, x2, right - (x1 - left), fx1, fx2, n, k + 1, func, 1) :
+            new FibonacciIteration(left, x2, eps,left + (right - x2), x1, fx1, fx2, n, k + 1, func, -1);
+    }
+
+    @Override
+    public Point getExtremum() {
+        return null;
+>>>>>>> 2e3f68451392e1ca246e2872adf5c22a854d1914
     }
 
     public double getLeft() {
