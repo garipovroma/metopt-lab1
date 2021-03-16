@@ -5,6 +5,7 @@ import com.example.demo.model.base.Point;
 import com.example.demo.model.iterations.DichotomyIteration;
 import com.example.demo.model.iterations.GoldenRatioIteration;
 
+@Deprecated
 public class GoldenRatio {
     private GoldenRatioIteration iteration;
     public GoldenRatio(double left, double right, double eps) {

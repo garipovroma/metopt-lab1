@@ -4,6 +4,7 @@ import com.example.demo.model.base.Graph;
 import com.example.demo.model.base.Point;
 import com.example.demo.model.iterations.GoldenRatioIteration;
 import com.example.demo.model.optimizations.Dichotomy;
+import com.example.demo.model.optimizations.OptimizationMethodRunner;
 import com.example.demo.model.optimizations.GoldenRatio;
 
 import java.util.ArrayList;
@@ -13,9 +14,9 @@ public class GoldenRationViewIterator extends BaseViewIterator {
     private GoldenRatioIteration goldenRatioIteration;
     private final Point extremum;
 
-    public GoldenRationViewIterator(double left, double right, double eps, double delta) {
-        this.extremum = new GoldenRatio(left, right, eps).run(false);
+    public GoldenRationViewIterator(double left, double right, double eps) {
         this.goldenRatioIteration = new GoldenRatioIteration(left, right, eps, x -> -3.0 * x * Math.sin(0.75 * x) + Math.exp(-2.0 * x));
+        this.extremum = OptimizationMethodRunner.run(goldenRatioIteration, false);
     }
 
     public boolean hasNext() {

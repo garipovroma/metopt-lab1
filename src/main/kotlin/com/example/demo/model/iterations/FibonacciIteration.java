@@ -58,13 +58,13 @@ public class FibonacciIteration implements OptimizationMethodIteration {
     public FibonacciIteration next() {
         return fx1 > fx2 ?
                 new FibonacciIteration(x1, right, eps,
-                        left + fib(n - k + 1) / fib(n + 2) * (initial_right - initial_left),
-                        left + fib(n - k + 2) / fib(n + 2) * (initial_right - initial_left),
-                        fx1, fx2, n, k + 1, func, 1, initial_left, initial_right) :
+                        left + fib(n - k + 1) / fib(n - k + 3) * (right - left),
+                        left + fib(n - k + 2) / fib(n - k + 3) * (right - left),
+                        fx1, fx2, n, k + 1, func, -1, initial_left, initial_right) :
                 new FibonacciIteration(left, x2, eps,
-                        left + fib(n - k + 1) / fib(n + 2) * (initial_right - initial_left),
-                        left + fib(n - k + 2) / fib(n + 2) * (initial_right - initial_left),
-                        fx1, fx2, n, k + 1, func, -1, initial_left, initial_right);
+                        left + fib(n - k + 1) / fib(n - k + 3) * (right - left),
+                        left + fib(n - k + 2) / fib(n - k + 3) * (right - left),
+                        fx1, fx2, n, k + 1, func, 1, initial_left, initial_right);
     }
 
     @Override
