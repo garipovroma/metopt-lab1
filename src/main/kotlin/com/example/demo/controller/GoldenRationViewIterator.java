@@ -5,6 +5,7 @@ import com.example.demo.model.base.Point;
 import com.example.demo.model.iterations.GoldenRatioIteration;
 import com.example.demo.model.optimizations.Dichotomy;
 import com.example.demo.model.optimizations.OptimizationMethodRunner;
+import com.example.demo.model.optimizations.GoldenRatio;
 
 import java.util.ArrayList;
 import java.util.List;

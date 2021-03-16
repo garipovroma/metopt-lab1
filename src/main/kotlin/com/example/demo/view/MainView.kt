@@ -1,10 +1,7 @@
 package com.example.demo.view
 
 import com.example.demo.app.Styles
-import com.example.demo.controller.DichotomyViewIterator
-import com.example.demo.controller.GoldenRationViewIterator
-import com.example.demo.controller.ParabolaViewIterator
-import com.example.demo.controller.ViewIterator
+import com.example.demo.controller.*
 import com.example.demo.model.base.Graph
 import com.example.demo.model.base.Point
 import javafx.scene.chart.LineChart
@@ -145,6 +142,11 @@ class MethodController: Controller() {
                 override fun viewIterator() =
                     ParabolaViewIterator(0.0, Math.PI * 2.0, 1e-3)
                 override fun toString(): String = "Parabola"
+            },
+            object : ViewFactory {
+                override fun viewIterator() =
+                    FibonacciViewIterator(0.0, Math.PI * 2.0, 1e-3)
+                override fun toString(): String = "Fibonacci"
             }
         )
 }
