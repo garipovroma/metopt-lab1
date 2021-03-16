@@ -30,8 +30,8 @@ public class DichotomyViewIterator extends BaseViewIterator {
         double offset = Math.max(right - extremum.getX(), extremum.getX() - left);
         res.add(
             Graph.intervalCount(
-                extremum.getX() - offset,
-                extremum.getX() + offset,
+                left,
+                right,
                 100,
                 dichotomyIteration.getFunc(),
                 "function"

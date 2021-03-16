@@ -47,7 +47,7 @@ class MainView : View("huy TornadoFX") {
         }
         lowerBound = left
         upperBound = right
-        tickUnit = (right - left) / 100.0
+        tickUnit = (right - left) / 10.0
     }
 
     private fun NumberAxis.setYAxis(graphs: List<Graph>) {
@@ -65,7 +65,7 @@ class MainView : View("huy TornadoFX") {
         }
         lowerBound = left
         upperBound = right
-        tickUnit = (right - left) / 100.0
+        tickUnit = (right - left) / 10.0
     }
 
     private fun assignAxis(axis: NumberAxis, otherAxis: NumberAxis): Unit {

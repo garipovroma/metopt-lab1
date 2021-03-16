@@ -41,6 +41,7 @@ public class DichotomyIteration extends AbstractMethodIteration {
         double x = (left + right) / 2.0;
         return new Point(x, apply(x));
     }
+
     public double getLeft() {
         return left;
     }

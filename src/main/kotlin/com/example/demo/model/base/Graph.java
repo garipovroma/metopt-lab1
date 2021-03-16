@@ -3,6 +3,7 @@ package com.example.demo.model.base;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 public class Graph {
     private final List<Point> points;
