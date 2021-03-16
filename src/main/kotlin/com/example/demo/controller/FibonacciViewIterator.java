@@ -52,12 +52,6 @@ public class FibonacciViewIterator extends BaseViewIterator {
                         fibonacciIteration.getFunc().apply(fibonacciIteration.getX2())
                 ), null
         );
-        addSinglePointGraph(res,
-                new Point(
-                        fibonacciIteration.getX1(),
-                        fibonacciIteration.getFunc().apply(fibonacciIteration.getX1())
-                ), null
-        );
         addSinglePointGraph(res, extremum, null);
         fibonacciIteration = fibonacciIteration.next();
         return res;

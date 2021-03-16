@@ -3,7 +3,6 @@ package com.example.demo.model.optimizations;
 import com.example.demo.model.base.DoubleFunction;
 import com.example.demo.model.base.Point;
 import com.example.demo.model.iterations.FibonacciIteration;
-import com.example.demo.model.iterations.GoldenRatioIteration;
 
 import static com.example.demo.model.base.FibonacciCalculator.fib;
 import static com.example.demo.model.base.FibonacciCalculator.calculateIterationsCount;
