@@ -1,6 +1,5 @@
 package com.example.demo.controller;
 
-import com.example.demo.model.base.BaseGraph;
 import com.example.demo.model.base.DoubleFunction;
 import com.example.demo.model.base.Graph;
 import com.example.demo.model.base.Point;
@@ -34,11 +33,12 @@ public class FibonacciViewIterator extends BaseViewIterator {
     public List<Graph> next() {
         List<Graph> res = new ArrayList<>();
         res.add(
-                new BaseGraph(
+                Graph.intervalCount(
                         fibonacciIteration.getLeft(),
                         fibonacciIteration.getRight(),
                         100,
-                        fibonacciIteration.getFunc()
+                        fibonacciIteration.getFunc(),
+                        null
                 ));
         addSinglePointGraph(res,
                 new Point(
