@@ -31,12 +31,6 @@
             <version>${kotlin.version}</version>
             <scope>test</scope>
         </dependency>
-        <!-- https://mvnrepository.com/artifact/org.ejml/dense64 -->
-        <dependency>
-            <groupId>org.ejml</groupId>
-            <artifactId>ejml-all</artifactId>
-            <version>0.40</version>
-        </dependency>
 
     </dependencies>
 
