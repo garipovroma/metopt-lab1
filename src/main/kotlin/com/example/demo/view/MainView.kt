@@ -8,6 +8,8 @@ import javafx.scene.chart.LineChart
 import javafx.scene.chart.NumberAxis
 import tornadofx.*
 import java.util.*
+import kotlin.math.exp
+import kotlin.math.sin
 
 class SelectionMethodEvent(val factory: ViewFactory) : FXEvent()
 
@@ -83,8 +85,11 @@ class MainView : View("huy TornadoFX") {
                 }
             }
             button("next") {
+                style = "-fx-margin: 5px"
                 action {
-                    fire(NextIterationEvent(iterator!!.next()))
+                    if (iterator!!.hasNext()) {
+                        fire(NextIterationEvent(iterator!!.next()))
+                    }
                 }
             }
         }
@@ -114,26 +119,27 @@ class MainView : View("huy TornadoFX") {
 }
 
 class MethodController: Controller() {
+    val func: (Double) -> Double = { x: Double -> -3.0 * x * sin(0.75 * x) + exp(-2.0 * x) }
     val methods =
         listOf(
             object : ViewFactory {
                 override fun viewIterator() =
-                    DichotomyViewIterator(0.0, Math.PI * 2.0, 1e-3, 1e-5)
+                    DichotomyViewIterator(0.0, Math.PI * 2.0, 1e-3, 1e-5, func)
                 override fun toString(): String = "Dichotomy"
             },
             object : ViewFactory {
                 override fun viewIterator() =
-                    GoldenRationViewIterator(0.0, Math.PI * 2.0, 1e-3)
+                    GoldenRationViewIterator(0.0, Math.PI * 2.0, 1e-3, func)
                 override fun toString(): String = "Golden Ration"
             },
             object : ViewFactory {
                 override fun viewIterator() =
-                    ParabolaViewIterator(0.0, Math.PI * 2.0, 1e-3)
+                    ParabolaViewIterator(0.0, Math.PI * 2.0, 1e-3, func)
                 override fun toString(): String = "Parabola"
             },
             object : ViewFactory {
                 override fun viewIterator() =
-                    FibonacciViewIterator(0.0, Math.PI * 2.0, 1e-3)
+                    FibonacciViewIterator(0.0, Math.PI * 2.0, 1e-3, func)
                 override fun toString(): String = "Fibonacci"
             }
         )

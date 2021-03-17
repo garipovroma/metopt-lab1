@@ -5,9 +5,6 @@ import com.example.demo.model.base.Point;
 
 public class ParabolaIteration extends AbstractMethodIteration {
     private final static int INITIAL_POINT_SEARCH_STEPS = 20;
-    private final double left;
-    private final double right;
-    private final double eps;
     private final double x1;
     private final double x2;
     private final double x3;
@@ -90,11 +87,8 @@ public class ParabolaIteration extends AbstractMethodIteration {
     }
 
     public ParabolaIteration(double left, double right, double eps, DoubleFunction func) {
-        super(func);
+        super(left, right, eps, func);
         this.isFirst = true;
-        this.left = left;
-        this.right = right;
-        this.eps = eps;
         this.x1 = left;
         this.x3 = right;
         this.fx1 = apply(x1);
@@ -110,9 +104,7 @@ public class ParabolaIteration extends AbstractMethodIteration {
     }
 
     private ParabolaIteration(boolean isFirst, double left, double right, double x1, double x2, double x3, double fx1, double fx2, double fx3, double eps, DoubleFunction func, double prevPMinX) {
-        super(func);
-        this.left = left;
-        this.right = right;
+        super(left, right, eps, func);
         this.x1 = x1;
         this.x2 = x2;
         this.x3 = x3;
@@ -120,7 +112,6 @@ public class ParabolaIteration extends AbstractMethodIteration {
         this.fx2 = fx2;
         this.fx3 = fx3;
         this.isFirst = isFirst;
-        this.eps = eps;
         Parabola parabola = findApproximationParabola();
         Point pMin = findParabolaMin();
         this.pMinX = pMin.getX();

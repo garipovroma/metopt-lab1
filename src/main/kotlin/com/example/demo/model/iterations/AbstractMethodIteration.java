@@ -6,8 +6,31 @@ import com.example.demo.model.base.Point;
 public abstract class AbstractMethodIteration implements OptimizationMethodIteration {
     protected final DoubleFunction function;
 
-    protected AbstractMethodIteration(DoubleFunction function) {
+    public DoubleFunction getFunction() {
+        return function;
+    }
+
+    public double getLeft() {
+        return left;
+    }
+
+    public double getRight() {
+        return right;
+    }
+
+    public double getEps() {
+        return eps;
+    }
+
+    protected final double left;
+    protected final double right;
+    protected final double eps;
+
+    protected AbstractMethodIteration(double left, double right, double eps, DoubleFunction function) {
         this.function = function;
+        this.left = left;
+        this.right = right;
+        this.eps = eps;
     }
 
     protected abstract Point getExtremumImpl();

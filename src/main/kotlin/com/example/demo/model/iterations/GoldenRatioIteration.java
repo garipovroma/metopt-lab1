@@ -5,9 +5,6 @@ import com.example.demo.model.base.Point;
 
 public class GoldenRatioIteration extends AbstractMethodIteration {
     public final static double TAU = (Math.sqrt(5.0) - 1.0) / 2.0;
-    private final double left;
-    private final double right;
-    private final double eps;
     private final double x1;
     private final double x2;
     private final double fx1;
@@ -18,10 +15,7 @@ public class GoldenRatioIteration extends AbstractMethodIteration {
     }
 
     private GoldenRatioIteration(double left, double right, double x1, double x2, double fx1, double fx2, double eps, DoubleFunction func, int calcLeft) {
-        super(func);
-        this.left = left;
-        this.right = right;
-        this.eps = eps;
+        super(left, right, eps, func);
         this.x1 = x1;
         this.x2 = x2;
         if (calcLeft == -1) {

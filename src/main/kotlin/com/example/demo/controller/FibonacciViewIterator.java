@@ -4,6 +4,7 @@ import com.example.demo.model.base.DoubleFunction;
 import com.example.demo.model.base.Graph;
 import com.example.demo.model.base.Point;
 import com.example.demo.model.iterations.FibonacciIteration;
+import com.example.demo.model.iterations.OptimizationMethodIteration;
 import com.example.demo.model.optimizations.Fibonacci;
 
 import java.util.ArrayList;
@@ -16,14 +17,13 @@ public class FibonacciViewIterator extends BaseViewIterator {
     private FibonacciIteration fibonacciIteration;
     private final Point extremum;
 
-    public FibonacciViewIterator(double left, double right, double eps) {
+    public FibonacciViewIterator(double left, double right, double eps, DoubleFunction function) {
         this.extremum = new Fibonacci(left, right, eps).run(false);
         int n = calculateIterationsCount(left, right, eps);
         double x1 = left + fib(n) / fib(n + 2) * (right - left);
         double x2 = left + fib(n + 1) / fib(n + 2) * (right - left);
-        DoubleFunction func = x -> -3 * x * Math.sin(x * 0.75) + Math.exp(-2 * x);
         this.fibonacciIteration = new FibonacciIteration(left, right, eps,
-                x1, x2, func.apply(x1), func.apply(x2), n, 0,func, 0, left, right);
+                x1, x2, function.apply(x1), function.apply(x2), n, 0, function, 0, left, right);
     }
 
     public boolean hasNext() {
@@ -60,5 +60,10 @@ public class FibonacciViewIterator extends BaseViewIterator {
     @Override
     public String toString() {
         return "Fibonacci";
+    }
+
+    @Override
+    public OptimizationMethodIteration getIteration() {
+        return fibonacciIteration;
     }
 }

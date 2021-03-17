@@ -4,29 +4,20 @@ import com.example.demo.model.base.DoubleFunction;
 import com.example.demo.model.base.Point;
 
 import java.util.Arrays;
-import java.util.HashSet;
 import java.util.List;
-import java.util.stream.Collector;
 import java.util.stream.Collectors;
 
 public class BrentIteration extends AbstractMethodIteration {
     private static final double K = (3. - Math.sqrt(5.)) / 2.;
-    private final double left;
-    private final double right;
-    private final double eps;
     private final double x;
     private final double w;
     private final double v;
     private final double d;
-//    private final double g;
     private final double e;
     private final double tol;
 
     private BrentIteration(DoubleFunction function, double left, double right, double eps, double x, double w, double v, double d, double e) {
-        super(function);
-        this.left = left;
-        this.right = right;
-        this.eps = eps;
+        super(left, right, eps, function);
         this.x = x;
         this.w = w;
         this.v = v;
@@ -36,10 +27,7 @@ public class BrentIteration extends AbstractMethodIteration {
     }
 
     public BrentIteration(double left, double right, double eps, DoubleFunction function) {
-        super(function);
-        this.left = left;
-        this.right = right;
-        this.eps = eps;
+        super(left, right, eps, function);
         x = w = v = left + K * (right - left);
         d = e = right - left;
         this.tol = eps * Math.abs(x) + eps / 10.0;
@@ -61,7 +49,6 @@ public class BrentIteration extends AbstractMethodIteration {
 
     @Override
     public OptimizationMethodIteration next() {
-        double g = e;
         double newE = d;
         double fx = apply(x);
         double fv = apply(v);
@@ -72,8 +59,7 @@ public class BrentIteration extends AbstractMethodIteration {
             List<Double> o4ko = Arrays.stream(new Double[]{x, w, v}).sorted().collect(Collectors.toList());
             Point point = ParabolaIteration.findParabolaMin(o4ko.get(0), o4ko.get(1), o4ko.get(2), fx, fw, fv, function, true);
             u = point.getX();
-//            u = new ParabolaIteration(left, right, eps, function).getpMinX();
-            if (u >= left && u <= right && Math.abs(u - x) < g / 2.0) {
+            if (u >= left && u <= right && Math.abs(u - x) < e / 2.0) {
                 accepted = true;
             } else if (u - left < 2.0 * tol || right - u < 2.0 * tol) {
                 u = x - Math.signum(x - (left + right) / 2.0) * tol;

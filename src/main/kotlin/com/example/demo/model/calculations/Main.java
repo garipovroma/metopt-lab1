@@ -75,12 +75,12 @@ public class Main {
             }
             System.out.println();
 
-            System.out.print("Fibonacci ");
-            for (double x : eps) {
-                DoubleFunctionCounter func = new DoubleFunctionCounter();
-                OptimizationMethodRunner.run(Fibonacci.Iteration(0, 2 * Math.PI, x, func), false);
-                System.out.print(func.count + " ");
-            }
+//            System.out.print("Fibonacci ");
+//            for (double x : eps) {
+//                DoubleFunctionCounter func = new DoubleFunctionCounter();
+//                OptimizationMethodRunner.run(Fibonacci.Iteration(0, 2 * Math.PI, x, func), false);
+//                System.out.print(func.count + " ");
+//            }
             System.out.println();
             System.out.print("Parabola ");
             for (double x : eps) {

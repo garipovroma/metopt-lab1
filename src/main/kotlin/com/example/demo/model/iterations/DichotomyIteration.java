@@ -4,21 +4,15 @@ import com.example.demo.model.base.DoubleFunction;
 import com.example.demo.model.base.Point;
 
 public class DichotomyIteration extends AbstractMethodIteration {
-    private final double left;
-    private final double right;
     private final double delta;
-    private final double eps;
     private final double x1;
     private final double x2;
     private final double y1;
     private final double y2;
 
     public DichotomyIteration(double left, double right, double eps, double delta, DoubleFunction func) {
-        super(func);
-        this.left = left;
-        this.right = right;
+        super(left, right, eps, func);
         this.delta = delta;
-        this.eps = eps;
         this.x1 = (right + left - delta) / 2.0;
         this.x2 = (right + left + delta) / 2.0;
         this.y1 = apply(x1);
@@ -42,20 +36,8 @@ public class DichotomyIteration extends AbstractMethodIteration {
         return new Point(x, apply(x));
     }
 
-    public double getLeft() {
-        return left;
-    }
-
-    public double getRight() {
-        return right;
-    }
-
     public double getDelta() {
         return delta;
-    }
-
-    public double getEps() {
-        return eps;
     }
 
     public DoubleFunction getFunc() {

@@ -1,70 +1,81 @@
 package com.example.demo.controller;
 
+import com.example.demo.model.base.DoubleFunction;
 import com.example.demo.model.base.Graph;
 import com.example.demo.model.base.Point;
 import com.example.demo.model.iterations.DichotomyIteration;
-import com.example.demo.model.optimizations.Dichotomy;
+import com.example.demo.model.iterations.OptimizationMethodIteration;
+import com.example.demo.model.optimizations.OptimizationMethodResult;
+import com.example.demo.model.optimizations.OptimizationMethodRunner;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class DichotomyViewIterator extends BaseViewIterator {
-    private DichotomyIteration dichotomyIteration;
-    private double left;
-    private double right;
-    private final Point extremum;
+    private DichotomyIteration iteration;
+    private final double left;
+    private final double right;
+    private final OptimizationMethodResult result;
+    private int currentIteration = 0;
+    private final int iterationCount;
 
-    public DichotomyViewIterator(double left, double right, double eps, double delta) {
-        this.extremum = new Dichotomy(left, right, eps, delta, x -> -3.0 * x * Math.sin(0.75 * x) + Math.exp(-2.0 * x)).run(true);
-        this.dichotomyIteration = new DichotomyIteration(left, right, eps, delta, x -> -3.0 * x * Math.sin(0.75 * x) + Math.exp(-2.0 * x));
-        this.left = dichotomyIteration.getLeft();
-        this.right = dichotomyIteration.getRight();
+    public DichotomyViewIterator(double left, double right, double eps, double delta, DoubleFunction func) {
+        this.iteration = new DichotomyIteration(left, right, eps, delta, func);
+        this.result = OptimizationMethodRunner.run(iteration, false);
+        this.iterationCount = result.getIterationCount();
+        this.left = iteration.getLeft();
+        this.right = iteration.getRight();
     }
 
     public boolean hasNext() {
-        return dichotomyIteration.hasNext();
+        return currentIteration < iterationCount;
     }
 
     public List<Graph> next() {
+        currentIteration++;
         List<Graph> res = new ArrayList<>();
-        double offset = Math.max(right - extremum.getX(), extremum.getX() - left);
         res.add(
             Graph.intervalCount(
                 left,
                 right,
                 100,
-                dichotomyIteration.getFunc(),
+                iteration.getFunction(),
                 "function"
             ));
+        Point leftPoint =
+            new Point(
+                iteration.getLeft(),
+                apply(iteration.getLeft())
+            );
+        addSinglePointGraph(res,
+            leftPoint,
+            "left: (" + leftPoint.getX() + ", " + leftPoint.getY() + ")"
+        );
+        Point rightPoint =
+            new Point(
+                iteration.getRight(),
+                apply(iteration.getRight())
+            );
         addSinglePointGraph(res,
             new Point(
-                left,
-                dichotomyIteration.getFunc().apply(left)
+                iteration.getRight(),
+                apply(iteration.getRight())
             ),
-            "left"
+            "right: (" + rightPoint.getX() + ", " + rightPoint.getY() + ")"
         );
-        addSinglePointGraph(res,
-            new Point(
-                right,
-                dichotomyIteration.getFunc().apply(right)
-            ),
-            "right"
-        );
-//        addSinglePointGraph(res,
-//            new Point(
-//                dichotomyIteration.getX1(),
-//                dichotomyIteration.getFunc().apply(dichotomyIteration.getX1())
-//            )
-//        );
-        addSinglePointGraph(res, extremum, "extremum");
-        dichotomyIteration = dichotomyIteration.next();
-        left = dichotomyIteration.getLeft();
-        right = dichotomyIteration.getRight();
+        Point extremum = result.getExtremum();
+        addSinglePointGraph(res, extremum, "extremum: (" + extremum.getX() + ", " + extremum.getY() + ")");
+        iteration = iteration.next();
         return res;
     }
 
     @Override
     public String toString() {
         return "Dichotomy";
+    }
+
+    @Override
+    public OptimizationMethodIteration getIteration() {
+        return iteration;
     }
 }
