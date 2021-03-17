@@ -1,6 +1,7 @@
 package com.example.demo.model.iterations;
 
 import com.example.demo.model.base.DoubleFunction;
+import com.example.demo.model.base.FibonacciCalculator;
 import com.example.demo.model.base.Point;
 
 import static com.example.demo.model.base.FibonacciCalculator.calculateIterationsCount;
@@ -16,13 +17,26 @@ public class FibonacciIteration extends AbstractMethodIteration {
     private final double fx2;
     private final int n;
     private final int k;
-    private final DoubleFunction func;
-    private final double initial_right;
-    private final double initial_left;
+    private final double len;
 
-    public FibonacciIteration(double left, double right, double eps, double x1, double x2,
-                              double fx1, double fx2, int n, int k, DoubleFunction func, int calcLeft,
-                              double initial_left, double initial_right) {
+    public FibonacciIteration(double left, double right, double eps) {
+        this(left, right, eps, x -> -3.0 * x * Math.sin(0.75 * x) + Math.exp(-2.0 * x));
+    }
+    public FibonacciIteration(double left, double right, double eps, DoubleFunction func) {
+        super(func);
+        this.left = left;
+        this.right = right;
+        this.eps = eps;
+        this.n = FibonacciCalculator.calculateIterationsCount(left, right, eps);
+        this.x1 = left + fib(n) / fib(n + 2) * (right - left);
+        this.x2 = left + fib(n + 1) / fib(n + 2) * (right - left);
+        this.fx1 = f(x1);
+        this.fx2 = f(x2);
+        this.k = 1;
+        this.len = right - left;
+    }
+    private FibonacciIteration(double left, double right, double eps, double x1, double x2,
+                              double fx1, double fx2, int n, int k, DoubleFunction func, double len) {
         super(func);
         this.left = left;
         this.right = right;
@@ -33,13 +47,11 @@ public class FibonacciIteration extends AbstractMethodIteration {
         this.fx2 = fx2;
         this.n = n;
         this.k = k;
-        this.func = func;
-        this.initial_left = initial_left;
-        this.initial_right = initial_right;
+        this.len = len;
     }
 
     private double f(double x) {
-        return func.apply(x);
+        return function.apply(x);
     }
 
     @Override
@@ -49,7 +61,23 @@ public class FibonacciIteration extends AbstractMethodIteration {
 
     @Override
     public FibonacciIteration next() {
-        return null;
+        double newLeft, newRight, newX1, newX2, newFx1, newFx2;
+        if (fx1 > fx2) {
+            newLeft = x1;
+            newRight = right;
+            newX1 = x2;
+            newX2 = newLeft + fib(n - k + 2) / fib(n + 2) * (len);
+            newFx1 = fx2;
+            newFx2 = f(newX2);
+        } else {
+            newLeft = left;
+            newRight = x2;
+            newX2 = x1;
+            newX1 = left + fib(n - k + 1) / fib(n + 2) * (len);
+            newFx1 = f(newX1);
+            newFx2 = fx1;
+        }
+        return new FibonacciIteration(newLeft, newRight, eps, newX1, newX2, newFx1, newFx2, n, k + 1, function, len);
     }
 
     public Point getExtremumImpl() {
@@ -63,6 +91,10 @@ public class FibonacciIteration extends AbstractMethodIteration {
             throw new UnsupportedOperationException("getExtremum allowed only after all iterations");
         double x = (left + right) / 2.0;
         return new Point(x, apply(x));
+    }
+
+    public DoubleFunction getFunc() {
+        return this.function;
     }
 
     public double getLeft() {
@@ -93,10 +125,6 @@ public class FibonacciIteration extends AbstractMethodIteration {
         return fx2;
     }
 
-    public DoubleFunction getFunc() {
-        return func;
-    }
-
     @Override
     public String toString() {
         return "FibonacciIteration{" +
@@ -109,7 +137,6 @@ public class FibonacciIteration extends AbstractMethodIteration {
                 ", fx2=" + fx2 +
                 ", n=" + n +
                 ", k=" + k +
-                ", func=" + func +
                 '}';
     }
 }

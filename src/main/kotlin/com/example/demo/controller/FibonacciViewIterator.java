@@ -5,6 +5,7 @@ import com.example.demo.model.base.Graph;
 import com.example.demo.model.base.Point;
 import com.example.demo.model.iterations.FibonacciIteration;
 import com.example.demo.model.optimizations.Fibonacci;
+import com.example.demo.model.optimizations.OptimizationMethodRunner;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -17,13 +18,8 @@ public class FibonacciViewIterator extends BaseViewIterator {
     private final Point extremum;
 
     public FibonacciViewIterator(double left, double right, double eps) {
-        this.extremum = new Fibonacci(left, right, eps).run(false);
-        int n = calculateIterationsCount(left, right, eps);
-        double x1 = left + fib(n) / fib(n + 2) * (right - left);
-        double x2 = left + fib(n + 1) / fib(n + 2) * (right - left);
-        DoubleFunction func = x -> -3 * x * Math.sin(x * 0.75) + Math.exp(-2 * x);
-        this.fibonacciIteration = new FibonacciIteration(left, right, eps,
-                x1, x2, func.apply(x1), func.apply(x2), n, 0,func, 0, left, right);
+        this.extremum = OptimizationMethodRunner.run(new FibonacciIteration(left, right, eps), false).getExtremum();
+        this.fibonacciIteration = new FibonacciIteration(left, right, eps);
     }
 
     public boolean hasNext() {
