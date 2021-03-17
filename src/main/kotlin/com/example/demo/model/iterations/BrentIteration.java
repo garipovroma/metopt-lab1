@@ -12,23 +12,35 @@ public class BrentIteration extends AbstractMethodIteration {
     private final double x;
     private final double w;
     private final double v;
+    private final double fx;
+    private final double fw;
+    private final double fv;
     private final double d;
     private final double e;
     private final double tol;
 
     private BrentIteration(DoubleFunction function, double left, double right, double eps, double x, double w, double v, double d, double e) {
+        this(function, left, right, eps, x, w, v, function.apply(x), function.apply(w), function.apply(v), d, e);
+    }
+
+    private BrentIteration(DoubleFunction function, double left, double right, double eps,
+                       double x, double w, double v, double fx, double fw, double fv, double d, double e) {
         super(left, right, eps, function);
         this.x = x;
         this.w = w;
         this.v = v;
         this.d = d;
         this.e = e;
+        this.fx = fx;
+        this.fw = fw;
+        this.fv = fv;
         this.tol = eps * Math.abs(x) + eps / 10.0;
     }
 
     public BrentIteration(double left, double right, double eps, DoubleFunction function) {
         super(left, right, eps, function);
         x = w = v = left + K * (right - left);
+        fx = fw = fv = function.apply(x);
         d = e = right - left;
         this.tol = eps * Math.abs(x) + eps / 10.0;
     }
@@ -50,9 +62,6 @@ public class BrentIteration extends AbstractMethodIteration {
     @Override
     public OptimizationMethodIteration next() {
         double newE = d;
-        double fx = apply(x);
-        double fv = apply(v);
-        double fw = apply(w);
         boolean accepted = false;
         double u = 0xDEAD_BEEF;
         if (different(x, w, v, eps) && different(fx, fw, fv, eps)) {
@@ -88,7 +97,7 @@ public class BrentIteration extends AbstractMethodIteration {
             } else {
                 newRight = x;
             }
-            return new BrentIteration(function, newLeft, newRight, eps, u, x, w, newD, newE);
+            return new BrentIteration(function, newLeft, newRight, eps, u, x, w, fu, fx, fw, newD, newE);
         } else {
             if (u >= x) {
                 newRight = u;
@@ -96,11 +105,11 @@ public class BrentIteration extends AbstractMethodIteration {
                 newLeft = u;
             }
             if (fu <= fw || Math.abs(w - x) < eps) {
-                return new BrentIteration(function, newLeft, newRight, eps, x, u, w, newD, newE);
+                return new BrentIteration(function, newLeft, newRight, eps, x, u, w, fx, fu, fw, newD, newE);
             } else if (fu <= fv || Math.abs(v - x) < eps || Math.abs(v - w) < eps) {
-                return new BrentIteration(function, newLeft, newRight, eps, x, w, u, newD, newE);
+                return new BrentIteration(function, newLeft, newRight, eps, x, w, u, fx, fw, fu, newD, newE);
             }
-            return new BrentIteration(function, newLeft, newRight, eps, x, w, v, newD, newE);
+            return new BrentIteration(function, newLeft, newRight, eps, x, w, v, fx, fw, fv, newD, newE);
         }
     }
 
