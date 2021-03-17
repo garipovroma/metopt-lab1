@@ -49,7 +49,7 @@ public class FibonacciIteration extends AbstractMethodIteration {
 
     @Override
     public FibonacciIteration next() {
-
+        return null;
     }
 
     public Point getExtremumImpl() {

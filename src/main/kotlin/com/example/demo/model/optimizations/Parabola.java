@@ -27,7 +27,7 @@ public class Parabola {
             }
         }
         double x = iteration.getpMinX();
-        double y = iteration.getpMinY();
+        double y = iteration.getFofMinX();
         return new Point(x, y);
     }
 
