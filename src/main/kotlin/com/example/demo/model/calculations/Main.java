@@ -1,9 +1,12 @@
 package com.example.demo.model.calculations;
 
+import com.example.demo.model.base.Point;
 import com.example.demo.model.iterations.*;
 import com.example.demo.model.optimizations.*;
 
 import java.util.Arrays;
+
+import static com.example.demo.model.base.FibonacciCalculator.fib;
 
 public class Main {
     public static void main(String[] args) {
