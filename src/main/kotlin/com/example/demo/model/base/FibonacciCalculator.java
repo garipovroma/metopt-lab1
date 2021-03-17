@@ -5,16 +5,12 @@ import java.util.HashMap;
 public class FibonacciCalculator {
     public static final HashMap<Integer, Double> FIBONACCI = new HashMap<>();
     private final static double SQRT_OF_FIVE = Math.sqrt(5.0);
+    static {
+        FIBONACCI.put(1, 1.0);
+        FIBONACCI.put(2, 1.0);
+    }
     public static double fib(int n) {
-//        if (FIBONACCI.containsKey(n)) {
-//            return FIBONACCI.get(n);
-//        }
-        return FIBONACCI.computeIfAbsent(n, num -> Math.pow((1 + SQRT_OF_FIVE) / 2, num) / SQRT_OF_FIVE);
-//        double a = (1 + SQRT_OF_FIVE) / 2;
-//        double pow_a = Math.pow(a, n);
-//        double fib = (pow_a) / SQRT_OF_FIVE;
-//        FIBONACCI.put(n, fib);
-//        return fib;
+        return FIBONACCI.computeIfAbsent(n, num -> fib(num - 1) + fib(num - 2));
     }
 
     public static int calculateIterationsCount(double left, double right, double eps) {

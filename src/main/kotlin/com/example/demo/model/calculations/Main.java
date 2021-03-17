@@ -6,6 +6,8 @@ import com.example.demo.model.optimizations.*;
 
 import java.util.Arrays;
 
+import static com.example.demo.model.base.FibonacciCalculator.fib;
+
 public class Main {
     public static void main(String[] args) {
         DoubleFunction f = value -> -3 * value * Math.sin(value * 0.75) + Math.exp(-2 * value);
