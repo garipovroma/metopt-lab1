@@ -25,7 +25,8 @@ public class Main {
         // Statistics
 //        System.out.println(OptimizationMethodRunner.run(new DichotomyIteration(0, 2 * Math.PI, 1e-3, 1e-5, f), true).getExtremum());
 //        System.out.println(OptimizationMethodRunner.run(new GoldenRatioIteration(0, 2 * Math.PI, 1e-3, f), true).getExtremum());
-        System.out.println(OptimizationMethodRunner.run(new ParabolaIteration(0, 2 * Math.PI, 1e-3, f), true).getExtremum());
+//        System.out.println(OptimizationMethodRunner.run(new ParabolaIteration(0, 2 * Math.PI, 1e-3, f), true).getExtremum());
+        System.out.println(OptimizationMethodRunner.run(new BrentIteration(0, 2 * Math.PI, 1e-8, f), true).getExtremum());
         {
             // -log(eps) -> calcs
 //            double[] eps = new double[]{1e-1, 1e-2, 1e-3, 1e-4, 1e-5, 1e-6, 1e-7, 1e-8, 1e-9};
@@ -86,7 +87,12 @@ public class Main {
                 System.out.print(func.count + " ");
             }
             System.out.println();
-
+            System.out.println("Brent ");
+            for (double x : eps) {
+                DoubleFunctionCounter func = new DoubleFunctionCounter();
+                OptimizationMethodRunner.run(new BrentIteration(0, 2 * Math.PI, x, func), false);
+                System.out.print(func.count + " ");
+            }
             // Brent
         }
     }

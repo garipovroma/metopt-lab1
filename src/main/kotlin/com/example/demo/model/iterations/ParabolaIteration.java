@@ -4,7 +4,7 @@ import com.example.demo.model.base.DoubleFunction;
 import com.example.demo.model.base.Point;
 
 public class ParabolaIteration extends AbstractMethodIteration {
-    private final static int INITIAL_POINT_SEARCH_STEPS = 25;
+    private final static int INITIAL_POINT_SEARCH_STEPS = 20;
     private final double left;
     private final double right;
     private final double eps;
