@@ -25,8 +25,8 @@ public class FibonacciIteration extends AbstractMethodIteration {
         this.n = FibonacciCalculator.calculateIterationsCount(left, right, eps);
         this.x1 = left + fib(n) / fib(n + 2) * (right - left);
         this.x2 = left + fib(n + 1) / fib(n + 2) * (right - left);
-        this.fx1 = f(x1);
-        this.fx2 = f(x2);
+        this.fx1 = apply(x1);
+        this.fx2 = apply(x2);
         this.k = 1;
         this.len = right - left;
     }
@@ -43,10 +43,6 @@ public class FibonacciIteration extends AbstractMethodIteration {
         this.len = len;
     }
 
-    private double f(double x) {
-        return function.apply(x);
-    }
-
     @Override
     public boolean hasNext() {
         return (k < n);
@@ -61,13 +57,13 @@ public class FibonacciIteration extends AbstractMethodIteration {
             newX1 = x2;
             newX2 = newLeft + fib(n - k + 2) / fib(n + 2) * (len);
             newFx1 = fx2;
-            newFx2 = f(newX2);
+            newFx2 = apply(newX2);
         } else {
             newLeft = left;
             newRight = x2;
             newX2 = x1;
             newX1 = left + fib(n - k + 1) / fib(n + 2) * (len);
-            newFx1 = f(newX1);
+            newFx1 = apply(newX1);
             newFx2 = fx1;
         }
         return new FibonacciIteration(newLeft, newRight, eps, newX1, newX2, newFx1, newFx2, n, k + 1, function, len);
@@ -112,7 +108,7 @@ public class FibonacciIteration extends AbstractMethodIteration {
 
     @Override
     public String toString() {
-        return "FibonacciIteration{" +
+        /*return "FibonacciIteration{" +
                 "left=" + left +
                 ", right=" + right +
                 ", eps=" + eps +
@@ -122,6 +118,7 @@ public class FibonacciIteration extends AbstractMethodIteration {
                 ", fx2=" + fx2 +
                 ", n=" + n +
                 ", k=" + k +
-                '}';
+                '}';*/
+        return String.format("%.4f & %.4f & %.4f & %.4f & %.4f & %.4f \\\\\n\\hline", left, right, x1, x2, fx1, fx2);
     }
 }

@@ -65,8 +65,7 @@ public class BrentIteration extends AbstractMethodIteration {
         boolean accepted = false;
         double u = 0xDEAD_BEEF;
         if (different(x, w, v, eps) && different(fx, fw, fv, eps)) {
-            List<Double> o4ko = Arrays.stream(new Double[]{x, w, v}).sorted().collect(Collectors.toList());
-            Point point = ParabolaIteration.findParabolaMin(o4ko.get(0), o4ko.get(1), o4ko.get(2), fx, fw, fv, function, true);
+            Point point = ParabolaIteration.findParabolaMin(x, w, v, fx, fw, fv, function, true);
             u = point.getX();
             if (u >= left && u <= right && Math.abs(u - x) < e / 2.0) {
                 accepted = true;
