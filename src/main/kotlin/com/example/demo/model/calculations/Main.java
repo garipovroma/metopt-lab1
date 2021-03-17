@@ -4,13 +4,15 @@ import com.example.demo.model.base.DoubleFunction;
 import com.example.demo.model.iterations.*;
 import com.example.demo.model.optimizations.*;
 
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 
 import static com.example.demo.model.base.FibonacciCalculator.fib;
 
 public class Main {
     public static void main(String[] args) {
-        DoubleFunction f = value -> -3 * value * Math.sin(value * 0.75) + Math.exp(-2 * value);
+        final DoubleFunction f = value -> -3 * value * Math.sin(value * 0.75) + Math.exp(-2 * value);
 //        Parabola parabola = new Parabola(0, 2 * Math.PI, 1e-8);
 //        System.out.println(parabola.run(false));
 //        System.out.println(dichotomy.run(true));
@@ -24,11 +26,13 @@ public class Main {
 //        Point result = OptimizationMethodRunner.run(new ParabolaIteration(0, 2 * Math.PI, 1e-3, func), true);
 //        System.out.format("%.4f %.4f", result.getX(), result.getY());
 
+        final double L = 0, R = 2 * Math.PI, EPS = 1e-3, DELTA = 1e-5;
         // Statistics
-//        System.out.println(OptimizationMethodRunner.run(new DichotomyIteration(0, 2 * Math.PI, 1e-3, 1e-5, f), true).getExtremum());
-//        System.out.println(OptimizationMethodRunner.run(new GoldenRatioIteration(0, 2 * Math.PI, 1e-3, f), true).getExtremum());
-//        System.out.println(OptimizationMethodRunner.run(new ParabolaIteration(0, 2 * Math.PI, 1e-3, f), true).getExtremum());
-        System.out.println(OptimizationMethodRunner.run(new BrentIteration(0, 2 * Math.PI, 1e-8, f), true).getExtremum());
+//        System.out.println(OptimizationMethodRunner.run(new DichotomyIteration(L, R, EPS, DELTA, f), true).getExtremum());
+//        System.out.println(OptimizationMethodRunner.run(new GoldenRatioIteration(L, R, EPS, f), true).getExtremum());
+//        System.out.println(OptimizationMethodRunner.run(Fibonacci.Iteration(L, R, EPS, f), true).getExtremum());
+//        System.out.println(OptimizationMethodRunner.run(new ParabolaIteration(L, R, EPS, f), true).getExtremum());
+        System.out.println(OptimizationMethodRunner.run(new BrentIteration(L, R, EPS, f), true).getExtremum());
         {
             // -log(eps) -> calcs
 //            double[] eps = new double[]{1e-1, 1e-2, 1e-3, 1e-4, 1e-5, 1e-6, 1e-7, 1e-8, 1e-9};
@@ -57,45 +61,74 @@ public class Main {
                     1.1111112e-02, 1.0101011e-02, 9.0909100e-03, 8.0808090e-03,
                     7.0707080e-03, 6.0606070e-03, 5.0505060e-03, 4.0404050e-03,
                     3.0303040e-03, 2.0202030e-03, 1.0101020e-03, 1.0000000e-09};
-            System.out.println("eps: " + Arrays.toString(eps));
+            List<Integer> list = new ArrayList<Integer>();
 
-            System.out.print("Dichotomy ");
+            /*DoubleFunctionCounter func = new DoubleFunctionCounter();
+
+            List<AbstractMethodIteration> methods = new ArrayList<>(Arrays.asList(
+                    new DichotomyIteration(0, 2 * Math.PI, x, x / 4 + x * x / 10, func),
+                    new GoldenRatioIteration(0, 2 * Math.PI, x, func),
+//                        Fibonacci.Iteration(0, 2 * Math.PI, x, func),
+                    new ParabolaIteration(0, 2 * Math.PI, x, func),
+                    new BrentIteration(0, 2 * Math.PI, x, func)));
+
+
+
+            methods.forEach(iteration -> {
+                for (double x : eps) {
+                    func.reset();
+                    OptimizationMethodRunner.run(iteration, false);
+                    list.add(func.count);
+                }
+            })
+*/
+
+            /*System.out.println("eps: " + Arrays.toString(eps));
             for (double x : eps) {
                 DoubleFunctionCounter func = new DoubleFunctionCounter();
-                OptimizationMethodRunner.run(new DichotomyIteration(0, 2 * Math.PI, x, x / 4 + x * x / 10, func), false);
-                System.out.print(func.count + " ");
+                OptimizationMethodRunner.run(new DichotomyIteration(L, R, x, x / 4 + x * x / 10, func), false);
+                list.add(func.count);
             }
-            System.out.println();
+            System.out.println(list);
+            list.clear();*/
 
-            System.out.print("GoldenRation ");
-            for (double x : eps) {
+            /* GoldenRatio */
+            /*for (double x : eps) {
                 DoubleFunctionCounter func = new DoubleFunctionCounter();
-                OptimizationMethodRunner.run(new GoldenRatioIteration(0, 2 * Math.PI, x, func), false);
-                System.out.print(func.count + " ");
+                OptimizationMethodRunner.run(new GoldenRatioIteration(L, R, x, func), false);
+                list.add(func.count);
             }
-            System.out.println();
+            System.out.println(list);
+            list.clear();*/
 
-            System.out.print("Fibonacci ");
+            /* Fibonacci */
+            /*
             for (double x : eps) {
                 DoubleFunctionCounter func = new DoubleFunctionCounter();
                 OptimizationMethodRunner.run(Fibonacci.Iteration(0, 2 * Math.PI, x, func), false);
-                System.out.print(func.count + " ");
+                list.add(func.count);
             }
-            System.out.println();
-            System.out.print("Parabola ");
+            System.out.println(list);
+            list.clear();
+            */
+
+            /* Parabola */
+            /*for (double x : eps) {
+                DoubleFunctionCounter func = new DoubleFunctionCounter();
+                OptimizationMethodRunner.run(new ParabolaIteration(L, R, x, func), false);
+                list.add(func.count);
+            }
+            System.out.println(list);
+            list.clear();*/
+
+            /* Brent */
             for (double x : eps) {
                 DoubleFunctionCounter func = new DoubleFunctionCounter();
-                OptimizationMethodRunner.run(new ParabolaIteration(0, 2 * Math.PI, x, func), false);
-                System.out.print(func.count + " ");
+                OptimizationMethodRunner.run(new BrentIteration(L, R, x, func), false);
+                list.add(func.count);
             }
-            System.out.println();
-            System.out.println("Brent ");
-            for (double x : eps) {
-                DoubleFunctionCounter func = new DoubleFunctionCounter();
-                OptimizationMethodRunner.run(new BrentIteration(0, 2 * Math.PI, x, func), false);
-                System.out.print(func.count + " ");
-            }
-            // Brent
+            System.out.println(list);
+            list.clear();
         }
     }
 }
