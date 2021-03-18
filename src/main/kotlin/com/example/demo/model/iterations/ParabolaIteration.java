@@ -5,33 +5,33 @@ import com.example.demo.model.base.Point;
 
 public class ParabolaIteration extends AbstractMethodIteration {
     private final static int INITIAL_POINT_SEARCH_STEPS = 20;
-    private final double x1;
-    private final double x2;
-    private final double x3;
-    private final double fx1;
-    private final double fx2;
-    private final double fx3;
-    private final double pMinX;
-    private final double fOfMinX;
-    private final DoubleFunction approximationParabola;
-    private final boolean isFirst;
-    private final double prevPMinX;
+    private double x1;
+    private double x2;
+    private double x3;
+    private double fx1;
+    private double fx2;
+    private double fx3;
+    private double pMinX;
+    private double fOfMinX;
+    private DoubleFunction approximationParabola;
+    private boolean isFirst;
+    private double prevPMinX;
 
     public static Point findParabolaMin(double x1, double x2, double x3, double fx1, double fx2, double fx3,
-                                        DoubleFunction func, /*TODO: remove it after stat calcs!!*/ boolean eug) {
-        double a1 = (fx2 - fx1) / (x2 - x1),
-                a2 = ( (fx3 - fx1) / (x3 - x1) - (fx2 - fx1) / (x2 - x1) ) / (x3 - x2);
-        DoubleFunction parabola = findApproximationParabola(x1, x2, x3, fx1, fx2, fx3).toDoubleFunction();
-        double x = (x1 + x2 - a1 / a2) / 2;
+                                        DoubleFunction func) {
+        double x = findParabolaMinX(x1, x2, x3, fx1, fx2, fx3);
         double y = func.apply(x);
-        if (eug && func instanceof DoubleFunctionCounter) {
-            ((DoubleFunctionCounter) func).count--;
-        }
         return new Point(x, y);
     }
 
+    public static double findParabolaMinX(double x1, double x2, double x3, double fx1, double fx2, double fx3) {
+        double a1 = (fx2 - fx1) / (x2 - x1),
+                a2 = ( (fx3 - fx1) / (x3 - x1) - (fx2 - fx1) / (x2 - x1) ) / (x3 - x2);
+        return (x1 + x2 - a1 / a2) / 2;
+    }
+
     private Point findParabolaMin() {
-        return findParabolaMin(x1, x2, x3, fx1, fx2, fx3, function, false);
+        return findParabolaMin(x1, x2, x3, fx1, fx2, fx3, function);
     }
 
     private static int compare(double x, double y) {
@@ -103,23 +103,6 @@ public class ParabolaIteration extends AbstractMethodIteration {
         this.prevPMinX = Double.NaN;
     }
 
-    private ParabolaIteration(boolean isFirst, double left, double right, double x1, double x2, double x3, double fx1, double fx2, double fx3, double eps, DoubleFunction func, double prevPMinX) {
-        super(left, right, eps, func);
-        this.x1 = x1;
-        this.x2 = x2;
-        this.x3 = x3;
-        this.fx1 = fx1;
-        this.fx2 = fx2;
-        this.fx3 = fx3;
-        this.isFirst = isFirst;
-        Parabola parabola = findApproximationParabola();
-        Point pMin = findParabolaMin();
-        this.pMinX = pMin.getX();
-        this.fOfMinX = pMin.getY();
-        this.approximationParabola = parabola.toDoubleFunction();
-        this.prevPMinX = prevPMinX;
-    }
-
     public static Parabola findApproximationParabola(double x1, double x2, double x3, double fx1, double fx2, double fx3) {
         double a0 = fx1, a1 = (fx2 - fx1) / (x2 - x1),
                 a2 = ( (fx3 - fx1) / (x3 - x1) - (fx2 - fx1) / (x2 - x1) ) / (x3 - x2);
@@ -134,7 +117,7 @@ public class ParabolaIteration extends AbstractMethodIteration {
     public boolean hasNext() { return isFirst || compareWithEps(prevPMinX, pMinX) != 0; }
 
     @Override
-    public ParabolaIteration next() {
+    public void next() {
         double nx1 = x1, nx2 = x2, nx3 = x3;
         double nfx1 = fx1, nfx2 = fx2, nfx3 = fx3;
         if (compare(x1, pMinX) <= 0 && compare(pMinX, x2) < 0) { // x1 <= pMinX < x2
@@ -158,8 +141,21 @@ public class ParabolaIteration extends AbstractMethodIteration {
                 nfx3 = fOfMinX;
             }
         }
-        return new ParabolaIteration(false, nx1, nx3, nx1, nx2, nx3, nfx1, nfx2, nfx3, eps, function, pMinX);
-//        return new ParabolaIteration(false, left, right, nx1, nx2, nx3, nfx1, nfx2, nfx3, eps, function, pMinX);
+        left = nx1;
+        right = nx3;
+        x1 = nx1;
+        x2 = nx2;
+        x3 = nx3;
+        fx3 = nfx3;
+        fx2 = nfx2;
+        fx1 = nfx1;
+        isFirst = false;
+        prevPMinX = pMinX;
+        Parabola parabola = findApproximationParabola();
+        Point pMin = findParabolaMin();
+        pMinX = pMin.getX();
+        fOfMinX = pMin.getY();
+        approximationParabola = parabola.toDoubleFunction();
     }
 
     public double getLeft() {

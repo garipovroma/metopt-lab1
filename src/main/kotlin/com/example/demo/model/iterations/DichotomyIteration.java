@@ -5,18 +5,18 @@ import com.example.demo.model.base.Point;
 
 public class DichotomyIteration extends AbstractMethodIteration {
     private final double delta;
-    private final double x1;
-    private final double x2;
-    private final double y1;
-    private final double y2;
+    private double x1;
+    private double x2;
+    private double fx1;
+    private double fx2;
 
     public DichotomyIteration(double left, double right, double eps, double delta, DoubleFunction func) {
         super(left, right, eps, func);
         this.delta = delta;
-        this.x1 = (right + left - delta) / 2.0;
-        this.x2 = (right + left + delta) / 2.0;
-        this.y1 = apply(x1);
-        this.y2 = apply(x2);
+        x1 = (right + left - delta) / 2.0;
+        x2 = (right + left + delta) / 2.0;
+        fx1 = apply(x1);
+        fx2 = apply(x2);
     }
 
     @Override
@@ -25,10 +25,16 @@ public class DichotomyIteration extends AbstractMethodIteration {
     }
 
     @Override
-    public DichotomyIteration next() {
-        return y1 <= y2 ?
-            new DichotomyIteration(left, x2, eps, delta, function) :
-            new DichotomyIteration(x1, right, eps, delta, function);
+    public void next() {
+        if (fx1 <= fx2) {
+            right = x2;
+        } else {
+            left = x1;
+        }
+        x1 = (right + left - delta) / 2.0;
+        x2 = (right + left + delta) / 2.0;
+        fx1 = apply(x1);
+        fx2 = apply(x2);
     }
 
     public Point getExtremumImpl() {
@@ -44,28 +50,17 @@ public class DichotomyIteration extends AbstractMethodIteration {
         return function;
     }
 
-    public double getX1() {
-        return x1;
-    }
-
-    public double getX2() {
-        return x2;
-    }
-
     @Override
     public String toString() {
         return "DichotomyIteration{" +
                 "left=" + left +
                 ", right=" + right +
                 ", delta=" + delta +
-                ", eps=" + eps +
-                ", x1=" + x1 +
-                ", x2=" + x2 +
-                '}';
+                ", eps=" + eps + '}';
     }
 
     @Override
     public String toTex() {
-        return String.format("%.4f & %.4f & %.4f & %.4f & %.4f & %.4f \\\\\n\\hline", left, right, x1, x2, y1, y2);
+        return String.format("%.4f & %.4f & %.4f & %.4f & %.4f & %.4f \\\\\n\\hline", left, right, x1, x2, fx1, fx2);
     }
 }

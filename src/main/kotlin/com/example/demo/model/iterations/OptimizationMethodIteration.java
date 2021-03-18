@@ -5,11 +5,11 @@ import com.example.demo.model.base.Point;
 
 public interface OptimizationMethodIteration {
     boolean hasNext();
-    OptimizationMethodIteration next();
+    void next();
     Point getExtremum();
     DoubleFunction getFunction();
     double getLeft();
     double getRight();
     double getEps();
-    public String toTex();
+    String toTex();
 }

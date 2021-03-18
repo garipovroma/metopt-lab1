@@ -6,6 +6,8 @@ import com.example.demo.model.optimizations.*;
 
 import java.util.Arrays;
 
+import static com.example.demo.model.base.FibonacciCalculator.fib;
+
 public class Main {
     public static void main(String[] args) {
         DoubleFunction f = value -> -3 * value * Math.sin(value * 0.75) + Math.exp(-2 * value);
@@ -23,11 +25,15 @@ public class Main {
 //        System.out.format("%.4f %.4f", result.getX(), result.getY());
 
         // Statistics
-        System.out.println(OptimizationMethodRunner.run(new DichotomyIteration(0, 2 * Math.PI, 1e-3, 1e-5, f), false).getExtremum());
-        System.out.println(OptimizationMethodRunner.run(new FibonacciIteration(0, 2 * Math.PI, 1e-3, f), false).getExtremum());
-        System.out.println(OptimizationMethodRunner.run(new GoldenRatioIteration(0, 2 * Math.PI, 1e-3, f), false).getExtremum());
-        System.out.println(OptimizationMethodRunner.run(new ParabolaIteration(0, 2 * Math.PI, 1e-3, f), false).getExtremum());
-        System.out.println(OptimizationMethodRunner.run(new DichotomyIteration(0, 2 * Math.PI, 1e-3, 1e-9, f), false).getExtremum());
+        System.out.println("Statistics");
+        System.out.println(new DichotomyMethod(0, 2 * Math.PI, 1e-3, 1e-9, f).run(false));
+        System.out.println(OptimizationMethodRunner.run(new DichotomyIteration(0, 2 * Math.PI, 1e-3, 1e-9, f), false));
+        System.out.println(OptimizationMethodRunner.run(new GoldenRatioIteration(0, 2 * Math.PI, 1e-3, f), false));
+        System.out.println(OptimizationMethodRunner.run(new ParabolaIteration(0, 2 * Math.PI, 1e-3, f), false));
+        System.out.println(OptimizationMethodRunner.run(new BrentIteration(0, 2 * Math.PI, 1e-3, f), false));
+        System.out.println(OptimizationMethodRunner.run(new FibonacciIteration(0, 2 * Math.PI, 1e-3, f), false));
+
+//        System.out.println(OptimizationMethodRunner.run(new BrentIteration(0, 2 * Math.PI, 1e-3, f), true).getExtremum());
         {
             // -log(eps) -> calcs
 //            double[] eps = new double[]{1e-1, 1e-2, 1e-3, 1e-4, 1e-5, 1e-6, 1e-7, 1e-8, 1e-9};
@@ -83,12 +89,5 @@ public class Main {
             System.out.println(Arrays.toString(data));
             // Brent
         }
-        // MultimodalFunctions
-        DoubleFunction g = (x) -> (x - 1) * (x - 2) * (x - 3) * (x - 5) * (x - 9) * (x - 10);
-        System.out.println(OptimizationMethodRunner.run(new DichotomyIteration(0, 10, 1e-3, 1e-6, g), false).getExtremum());
-        System.out.println(OptimizationMethodRunner.run(new FibonacciIteration(0, 10, 1e-3, g), false).getExtremum());
-        System.out.println(OptimizationMethodRunner.run(new GoldenRatioIteration(0, 10, 1e-3, g), false).getExtremum());
-        System.out.println(OptimizationMethodRunner.run(new ParabolaIteration(0, 10, 1e-3, g), false).getExtremum());
-        System.out.println(OptimizationMethodRunner.run(new DichotomyIteration(0, 10, 1e-3, 1e-9, g), false).getExtremum());
     }
 }

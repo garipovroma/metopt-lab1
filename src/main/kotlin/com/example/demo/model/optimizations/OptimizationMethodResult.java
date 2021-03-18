@@ -18,4 +18,12 @@ public class OptimizationMethodResult {
     public int getIterationCount() {
         return iterationCount;
     }
+
+    @Override
+    public String toString() {
+        return "OptimizationMethodResult{" +
+                "extremum=" + extremum +
+                ", iterationCount=" + iterationCount +
+                '}';
+    }
 }

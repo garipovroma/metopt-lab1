@@ -5,29 +5,17 @@ import com.example.demo.model.base.Point;
 
 public class GoldenRatioIteration extends AbstractMethodIteration {
     public final static double TAU = (Math.sqrt(5.0) - 1.0) / 2.0;
-    private final double x1;
-    private final double x2;
-    private final double fx1;
-    private final double fx2;
+    private double x1;
+    private double x2;
+    private double fx1;
+    private double fx2;
 
     public GoldenRatioIteration(double left, double right, double eps, DoubleFunction func) {
-        this(left, right, left + (1.0 - TAU) * (right - left), left + TAU * (right - left), 0, 0, eps, func, 0);
-    }
-
-    private GoldenRatioIteration(double left, double right, double x1, double x2, double fx1, double fx2, double eps, DoubleFunction func, int calcLeft) {
         super(left, right, eps, func);
-        this.x1 = x1;
-        this.x2 = x2;
-        if (calcLeft == -1) {
-            this.fx1 = func.apply(x1);
-            this.fx2 = fx1;
-        } else if (calcLeft == 1) {
-            this.fx1 = fx2;
-            this.fx2 = func.apply(x2);
-        } else {
-            this.fx1 = func.apply(x1);
-            this.fx2 = func.apply(x2);
-        }
+        this.x1 = left + (1.0 - TAU) * (right - left);
+        this.x2 = left + TAU * (right - left);
+        this.fx1 = apply(x1);
+        this.fx2 = apply(x2);
     }
 
     @Override
@@ -36,11 +24,22 @@ public class GoldenRatioIteration extends AbstractMethodIteration {
     }
 
     @Override
-    public GoldenRatioIteration next() {
-        return fx1 <= fx2 ?
-            new GoldenRatioIteration(left, x2, x2 - TAU * (x2 - left), x1, fx1, fx2, eps, function, -1) :
-            new GoldenRatioIteration(x1, right, x2, x1 + TAU * (right - x1), fx1, fx2, eps, function, 1);
-
+    public void next() {
+        if (fx1 <= fx2) {
+            right = x2;
+            double prevX1 = x1;
+            x1 = x2 - TAU * (x2 - left);
+            x2 = prevX1;
+            fx2 = fx1;
+            fx1 = apply(x1);
+        } else {
+            left = x1;
+            double prevX2 = x2;
+            x2 = x1 + TAU * (right - x1);
+            x1 = prevX2;
+            fx1 = fx2;
+            fx2 = apply(x2);
+        }
     }
 
     public Point getExtremumImpl() {

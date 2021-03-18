@@ -16,8 +16,9 @@ print(osy)
 plt.figure(figsize=(7, 6), dpi=200)
 
 for i in range(n):
-    plt.plot(osx[::-1], osy[i], label=labels[i])
+    plt.plot(osx, osy[i], label=labels[i])
     
+plt.gca().invert_xaxis()
 plt.xlabel("Точность")
 plt.ylabel("Количество вычислений функции f(x)")
 plt.xscale('log')

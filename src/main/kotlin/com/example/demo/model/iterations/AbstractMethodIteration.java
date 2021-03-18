@@ -22,8 +22,8 @@ public abstract class AbstractMethodIteration implements OptimizationMethodItera
         return eps;
     }
 
-    protected final double left;
-    protected final double right;
+    protected double left;
+    protected double right;
     protected final double eps;
 
     protected AbstractMethodIteration(double left, double right, double eps, DoubleFunction function) {

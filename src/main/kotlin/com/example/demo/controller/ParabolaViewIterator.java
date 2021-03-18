@@ -47,7 +47,7 @@ public class ParabolaViewIterator extends BaseViewIterator{
                 null
         ));
 //        addSinglePointGraph(res, extremum);
-        parabolaIteration = parabolaIteration.next();
+        parabolaIteration.next();
         return res;
     }
 
