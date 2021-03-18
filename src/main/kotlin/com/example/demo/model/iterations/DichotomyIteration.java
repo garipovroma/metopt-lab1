@@ -50,25 +50,13 @@ public class DichotomyIteration extends AbstractMethodIteration {
         return function;
     }
 
-//    public double getX1() {
-//        return x1;
-//    }
-//
-//    public double getX2() {
-//        return x2;
-//    }
-
     @Override
     public String toString() {
         return "DichotomyIteration{" +
                 "left=" + left +
                 ", right=" + right +
                 ", delta=" + delta +
-                ", eps=" + eps +
-//                ", x1=" + x1 +
-//                ", x2=" + x2 +
-//                ", func=" + func +
-                '}';
+                ", eps=" + eps + '}';
     }
 
     @Override
