@@ -184,7 +184,7 @@ public class ParabolaIteration extends AbstractMethodIteration {
 
     @Override
     public String toString() {
-        /*return "ParabolaIteration{" +
+        return "ParabolaIteration{" +
                 "left=" + left +
                 ", right=" + right +
                 ", eps=" + eps +
@@ -195,11 +195,15 @@ public class ParabolaIteration extends AbstractMethodIteration {
                 ", fx2=" + fx2 +
                 ", fx3=" + fx3 +
                 ", pMinX=" + pMinX +
-                ", pMinY=" + pMinY +
+                ", fOfMinX=" + fOfMinX +
                 ", approximationParabola=" + approximationParabola +
                 ", isFirst=" + isFirst +
                 ", func=" + function +
-                '}';*/
+                '}';
+    }
+
+    @Override
+    public String toTex() {
         return String.format("%.4f & %.4f & %.4f & %.4f & %.4f & %.4f & %.4f & %.4f \\\\\n\\hline", x1, x2, x3, fx1, fx2, fx3, pMinX, fOfMinX);
     }
 

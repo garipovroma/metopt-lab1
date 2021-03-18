@@ -25,21 +25,22 @@ public class Main {
 //        System.out.format("%.4f %.4f", result.getX(), result.getY());
 
         // Statistics
-        System.out.println(OptimizationMethodRunner.run(new DichotomyIteration(0, 2 * Math.PI, 1e-3, 1e-5, f), true).getExtremum());
+//        System.out.println(OptimizationMethodRunner.run(new DichotomyIteration(0, 2 * Math.PI, 1e-3, 1e-5, f), true).getExtremum());
 //        System.out.println(OptimizationMethodRunner.run(new GoldenRatioIteration(0, 2 * Math.PI, 1e-3, f), true).getExtremum());
 //        System.out.println(OptimizationMethodRunner.run(new ParabolaIteration(0, 2 * Math.PI, 1e-3, f), true).getExtremum());'
         //System.out.println(OptimizationMethodRunner.run(new DichotomyIteration(0, 2 * Math.PI, 1e-3, 1e-9, f), false).getExtremum());
 
-        System.out.println(OptimizationMethodRunner.run(new FibonacciIteration(0, 2 * Math.PI, 1e-3, f), true).getExtremum());
+        System.out.println(OptimizationMethodRunner.run(new BrentIteration(0, 2 * Math.PI, 1e-3, f), true).getExtremum());
         {
             // -log(eps) -> calcs
 //            double[] eps = new double[]{1e-1, 1e-2, 1e-3, 1e-4, 1e-5, 1e-6, 1e-7, 1e-8, 1e-9};
             double[] eps = new double[]{5e-2, 1e-2, 5e-3, 1e-3, 5e-4, 1e-4, 5e-5,
                    1e-5, 5e-6, 1e-6, 5e-7, 1e-7, 5e-8, 1e-8, 5e-9, 1e-9};
-            System.out.println("eps: " + Arrays.toString(eps));
+            //System.out.println("eps: ");
+            System.out.println(Arrays.toString(eps));
 
-            System.out.print("Dichotomy: ");
-            int[] data = new int[eps.length];
+            //System.out.print("Dichotomy: ");
+            int data[] = new int[eps.length];
             int ind = 0;
             for (double x : eps) {
                 DoubleFunctionCounter func = new DoubleFunctionCounter();
@@ -49,7 +50,7 @@ public class Main {
             System.out.println(Arrays.toString(data));
 
             ind = 0;
-            System.out.print("GoldenRation: ");
+            //System.out.print("GoldenRation: ");
             for (double x : eps) {
                 DoubleFunctionCounter func = new DoubleFunctionCounter();
                 OptimizationMethodRunner.run(new GoldenRatioIteration(0, 2 * Math.PI, x, func), false);
@@ -58,7 +59,7 @@ public class Main {
             System.out.println(Arrays.toString(data));
 
             ind = 0;
-            System.out.print("Fibonacci: ");
+            //System.out.print("Fibonacci: ");
             for (double x : eps) {
                 DoubleFunctionCounter func = new DoubleFunctionCounter();
                 OptimizationMethodRunner.run(new FibonacciIteration(0, 2 * Math.PI, x, func), false);
@@ -67,7 +68,7 @@ public class Main {
             System.out.println(Arrays.toString(data));
 
             ind = 0;
-            System.out.print("Parabola: ");
+            //System.out.print("Parabola: ");
             for (double x : eps) {
                 DoubleFunctionCounter func = new DoubleFunctionCounter();
                 OptimizationMethodRunner.run(new ParabolaIteration(0, 2 * Math.PI, x, func), false);
@@ -76,7 +77,7 @@ public class Main {
             System.out.println(Arrays.toString(data));
 
             ind = 0;
-            System.out.print("Brent: ");
+            //System.out.print("Brent: ");
             for (double x : eps) {
                 DoubleFunctionCounter func = new DoubleFunctionCounter();
                 OptimizationMethodRunner.run(new BrentIteration(0, 2 * Math.PI, x, func), false);

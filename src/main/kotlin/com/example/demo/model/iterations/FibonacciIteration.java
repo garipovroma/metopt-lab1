@@ -97,7 +97,7 @@ public class FibonacciIteration extends AbstractMethodIteration {
 
     @Override
     public String toString() {
-        /*return "FibonacciIteration{" +
+        return "FibonacciIteration{" +
                 "left=" + left +
                 ", right=" + right +
                 ", eps=" + eps +
@@ -107,7 +107,11 @@ public class FibonacciIteration extends AbstractMethodIteration {
                 ", fx2=" + fx2 +
                 ", n=" + n +
                 ", k=" + k +
-                '}';*/
+                '}';
+    }
+
+    @Override
+    public String toTex() {
         return String.format("%.4f & %.4f & %.4f & %.4f & %.4f & %.4f \\\\\n\\hline", left, right, x1, x2, fx1, fx2);
     }
 }
