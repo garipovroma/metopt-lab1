@@ -65,7 +65,7 @@ public class DichotomyViewIterator extends BaseViewIterator {
         );
         Point extremum = result.getExtremum();
         addSinglePointGraph(res, extremum, "extremum: (" + extremum.getX() + ", " + extremum.getY() + ")");
-        iteration = iteration.next();
+        iteration.next();
         return res;
     }
 

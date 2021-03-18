@@ -25,7 +25,7 @@ public class Main {
 //        System.out.format("%.4f %.4f", result.getX(), result.getY());
 
         // Statistics
-//        System.out.println(OptimizationMethodRunner.run(new DichotomyIteration(0, 2 * Math.PI, 1e-3, 1e-5, f), true).getExtremum());
+        System.out.println(OptimizationMethodRunner.run(new DichotomyIteration(0, 2 * Math.PI, 1e-3, 1e-5, f), true).getExtremum());
 //        System.out.println(OptimizationMethodRunner.run(new GoldenRatioIteration(0, 2 * Math.PI, 1e-3, f), true).getExtremum());
 //        System.out.println(OptimizationMethodRunner.run(new ParabolaIteration(0, 2 * Math.PI, 1e-3, f), true).getExtremum());'
         //System.out.println(OptimizationMethodRunner.run(new DichotomyIteration(0, 2 * Math.PI, 1e-3, 1e-9, f), false).getExtremum());
@@ -39,7 +39,7 @@ public class Main {
             System.out.println("eps: " + Arrays.toString(eps));
 
             System.out.print("Dichotomy: ");
-            int data[] = new int[eps.length];
+            int[] data = new int[eps.length];
             int ind = 0;
             for (double x : eps) {
                 DoubleFunctionCounter func = new DoubleFunctionCounter();

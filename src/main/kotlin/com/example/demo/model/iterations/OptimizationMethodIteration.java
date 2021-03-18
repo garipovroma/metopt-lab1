@@ -5,7 +5,7 @@ import com.example.demo.model.base.Point;
 
 public interface OptimizationMethodIteration {
     boolean hasNext();
-    OptimizationMethodIteration next();
+    void next();
     Point getExtremum();
     DoubleFunction getFunction();
     double getLeft();

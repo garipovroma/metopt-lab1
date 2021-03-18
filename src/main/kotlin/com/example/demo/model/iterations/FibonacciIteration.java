@@ -4,21 +4,16 @@ import com.example.demo.model.base.DoubleFunction;
 import com.example.demo.model.base.FibonacciCalculator;
 import com.example.demo.model.base.Point;
 
-import static com.example.demo.model.base.FibonacciCalculator.calculateIterationsCount;
 import static com.example.demo.model.base.FibonacciCalculator.fib;
 
 public class FibonacciIteration extends AbstractMethodIteration {
-    private final double x1;
-    private final double x2;
-    private final double fx1;
-    private final double fx2;
+    private double x1;
+    private double x2;
+    private double fx1;
+    private double fx2;
+    private int k;
     private final int n;
-    private final int k;
     private final double len;
-
-    public FibonacciIteration(double left, double right, double eps) {
-        this(left, right, eps, x -> -3.0 * x * Math.sin(0.75 * x) + Math.exp(-2.0 * x));
-    }
 
     public FibonacciIteration(double left, double right, double eps, DoubleFunction func) {
         super(left, right, eps, func);
@@ -31,25 +26,13 @@ public class FibonacciIteration extends AbstractMethodIteration {
         this.len = right - left;
     }
 
-    public FibonacciIteration(double left, double right, double eps, double x1, double x2,
-                              double fx1, double fx2, int n, int k, DoubleFunction func, double len) {
-        super(left, right, eps, func);
-        this.x1 = x1;
-        this.x2 = x2;
-        this.fx1 = fx1;
-        this.fx2 = fx2;
-        this.n = n;
-        this.k = k;
-        this.len = len;
-    }
-
     @Override
     public boolean hasNext() {
         return (k < n);
     }
 
     @Override
-    public FibonacciIteration next() {
+    public void next() {
         double newLeft, newRight, newX1, newX2, newFx1, newFx2;
         if (fx1 > fx2) {
             newLeft = x1;
@@ -66,7 +49,13 @@ public class FibonacciIteration extends AbstractMethodIteration {
             newFx1 = apply(newX1);
             newFx2 = fx1;
         }
-        return new FibonacciIteration(newLeft, newRight, eps, newX1, newX2, newFx1, newFx2, n, k + 1, function, len);
+        left = newLeft;
+        right = newRight;
+        x1 = newX1;
+        x2 = newX2;
+        fx1 = newFx1;
+        fx2 = newFx2;
+        k++;
     }
 
     public Point getExtremumImpl() {

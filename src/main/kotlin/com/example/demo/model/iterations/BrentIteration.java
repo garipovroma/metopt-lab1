@@ -9,40 +9,37 @@ import java.util.stream.Collectors;
 
 public class BrentIteration extends AbstractMethodIteration {
     private static final double K = (3. - Math.sqrt(5.)) / 2.;
-    private final double x;
-    private final double w;
-    private final double v;
-    private final double fx;
-    private final double fw;
-    private final double fv;
-    private final double d;
-    private final double e;
-    private final double tol;
+    private double x;
+    private double w;
+    private double v;
+    private double fx;
+    private double fw;
+    private double fv;
+    private double d;
+    private double e;
 
-    private BrentIteration(DoubleFunction function, double left, double right, double eps, double x, double w, double v, double d, double e) {
-        this(function, left, right, eps, x, w, v, function.apply(x), function.apply(w), function.apply(v), d, e);
-    }
-
-    private BrentIteration(DoubleFunction function, double left, double right, double eps,
-                       double x, double w, double v, double fx, double fw, double fv, double d, double e) {
-        super(left, right, eps, function);
-        this.x = x;
-        this.w = w;
-        this.v = v;
-        this.d = d;
-        this.e = e;
-        this.fx = fx;
-        this.fw = fw;
-        this.fv = fv;
-        this.tol = eps * Math.abs(x) + eps / 10.0;
-    }
+//    private BrentIteration(DoubleFunction function, double left, double right, double eps, double x, double w, double v, double d, double e) {
+//        this(function, left, right, eps, x, w, v, function.apply(x), function.apply(w), function.apply(v), d, e);
+//    }
+//
+//    private BrentIteration(DoubleFunction function, double left, double right, double eps,
+//                       double x, double w, double v, double fx, double fw, double fv, double d, double e) {
+//        super(left, right, eps, function);
+//        this.x = x;
+//        this.w = w;
+//        this.v = v;
+//        this.d = d;
+//        this.e = e;
+//        this.fx = fx;
+//        this.fw = fw;
+//        this.fv = fv;
+//    }
 
     public BrentIteration(double left, double right, double eps, DoubleFunction function) {
         super(left, right, eps, function);
         x = w = v = left + K * (right - left);
         fx = fw = fv = function.apply(x);
         d = e = right - left;
-        this.tol = eps * Math.abs(x) + eps / 10.0;
     }
 
     @Override
@@ -52,6 +49,7 @@ public class BrentIteration extends AbstractMethodIteration {
 
     @Override
     public boolean hasNext() {
+        double tol = tol(x);
         return !(Math.abs(x - (left + right) / 2.0) + (right - left) / 2.0 < 2 * tol + eps);
     }
 
@@ -59,11 +57,16 @@ public class BrentIteration extends AbstractMethodIteration {
         return Math.abs(a - b) > eps && Math.abs(a - c) > eps && Math.abs(c - b) > eps;
     }
 
+    private double tol(double x) {
+        return eps * Math.abs(x) + eps / 10.0;
+    }
+
     @Override
-    public OptimizationMethodIteration next() {
+    public void next() {
+        double tol = tol(x);
         double newE = d;
         boolean accepted = false;
-        double u = 0xDEAD_BEEF;
+        double u = 0.0;
         if (different(x, w, v, eps) && different(fx, fw, fv, eps)) {
             Point point = ParabolaIteration.findParabolaMin(x, w, v, fx, fw, fv, function, true);
             u = point.getX();
@@ -96,7 +99,13 @@ public class BrentIteration extends AbstractMethodIteration {
             } else {
                 newRight = x;
             }
-            return new BrentIteration(function, newLeft, newRight, eps, u, x, w, fu, fx, fw, newD, newE);
+            v = w;
+            w = x;
+            x = u;
+            fv = fw;
+            fw = fx;
+            fx = fu;
+//            return new BrentIteration(function, newLeft, newRight, eps, u, x, w, fu, fx, fw, newD, newE);
         } else {
             if (u >= x) {
                 newRight = u;
@@ -104,12 +113,22 @@ public class BrentIteration extends AbstractMethodIteration {
                 newLeft = u;
             }
             if (fu <= fw || Math.abs(w - x) < eps) {
-                return new BrentIteration(function, newLeft, newRight, eps, x, u, w, fx, fu, fw, newD, newE);
+                v = w;
+                w = u;
+                fv = fw;
+                fw = fu;
+//                return new BrentIteration(function, newLeft, newRight, eps, x, u, w, fx, fu, fw, newD, newE);
             } else if (fu <= fv || Math.abs(v - x) < eps || Math.abs(v - w) < eps) {
-                return new BrentIteration(function, newLeft, newRight, eps, x, w, u, fx, fw, fu, newD, newE);
+                v = u;
+                fv = fu;
+//                return new BrentIteration(function, newLeft, newRight, eps, x, w, u, fx, fw, fu, newD, newE);
             }
-            return new BrentIteration(function, newLeft, newRight, eps, x, w, v, fx, fw, fv, newD, newE);
+//            return new BrentIteration(function, newLeft, newRight, eps, x, w, v, fx, fw, fv, newD, newE);
         }
+        left = newLeft;
+        right = newRight;
+        d = newD;
+        e = newE;
     }
 
     @Override
@@ -123,7 +142,7 @@ public class BrentIteration extends AbstractMethodIteration {
                 ", v=" + v +
                 ", d=" + d +
                 ", e=" + e +
-                ", tol=" + tol +
+                ", tol=" + tol(x) +
                 '}';
     }
 }

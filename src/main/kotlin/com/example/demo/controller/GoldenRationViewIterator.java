@@ -52,7 +52,7 @@ public class GoldenRationViewIterator extends BaseViewIterator {
                 ), null
         );
         addSinglePointGraph(res, extremum, null);
-        goldenRatioIteration = goldenRatioIteration.next();
+        goldenRatioIteration.next();
         return res;
     }
 

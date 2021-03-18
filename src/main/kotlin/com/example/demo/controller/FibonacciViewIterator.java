@@ -5,14 +5,10 @@ import com.example.demo.model.base.Graph;
 import com.example.demo.model.base.Point;
 import com.example.demo.model.iterations.FibonacciIteration;
 import com.example.demo.model.iterations.OptimizationMethodIteration;
-import com.example.demo.model.optimizations.Fibonacci;
 import com.example.demo.model.optimizations.OptimizationMethodRunner;
 
 import java.util.ArrayList;
 import java.util.List;
-
-import static com.example.demo.model.base.FibonacciCalculator.calculateIterationsCount;
-import static com.example.demo.model.base.FibonacciCalculator.fib;
 
 public class FibonacciViewIterator extends BaseViewIterator {
     private FibonacciIteration fibonacciIteration;
@@ -54,7 +50,7 @@ public class FibonacciViewIterator extends BaseViewIterator {
                 ), "x2"
         );
         addSinglePointGraph(res, extremum, "extremum");
-        fibonacciIteration = fibonacciIteration.next();
+        fibonacciIteration.next();
         return res;
     }
 

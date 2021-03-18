@@ -10,7 +10,7 @@ public class OptimizationMethodRunner {
         }
         int counter = 1;
         while (iteration.hasNext()) {
-            iteration = iteration.next();
+            iteration.next();
             if (print) {
                 System.out.println(iteration);
             }
