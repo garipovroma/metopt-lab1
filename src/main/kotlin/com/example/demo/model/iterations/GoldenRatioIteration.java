@@ -27,14 +27,16 @@ public class GoldenRatioIteration extends AbstractMethodIteration {
     public void next() {
         if (fx1 <= fx2) {
             right = x2;
+            double prevX1 = x1;
             x1 = x2 - TAU * (x2 - left);
-            x2 = x1;
+            x2 = prevX1;
             fx2 = fx1;
             fx1 = apply(x1);
         } else {
             left = x1;
+            double prevX2 = x2;
             x2 = x1 + TAU * (right - x1);
-            x1 = x2;
+            x1 = prevX2;
             fx1 = fx2;
             fx2 = apply(x2);
         }

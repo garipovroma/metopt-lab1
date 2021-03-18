@@ -3,10 +3,6 @@ package com.example.demo.model.iterations;
 import com.example.demo.model.base.DoubleFunction;
 import com.example.demo.model.base.Point;
 
-import java.util.Arrays;
-import java.util.List;
-import java.util.stream.Collectors;
-
 public class BrentIteration extends AbstractMethodIteration {
     private static final double K = (3. - Math.sqrt(5.)) / 2.;
     private double x;
@@ -17,23 +13,6 @@ public class BrentIteration extends AbstractMethodIteration {
     private double fv;
     private double d;
     private double e;
-
-//    private BrentIteration(DoubleFunction function, double left, double right, double eps, double x, double w, double v, double d, double e) {
-//        this(function, left, right, eps, x, w, v, function.apply(x), function.apply(w), function.apply(v), d, e);
-//    }
-//
-//    private BrentIteration(DoubleFunction function, double left, double right, double eps,
-//                       double x, double w, double v, double fx, double fw, double fv, double d, double e) {
-//        super(left, right, eps, function);
-//        this.x = x;
-//        this.w = w;
-//        this.v = v;
-//        this.d = d;
-//        this.e = e;
-//        this.fx = fx;
-//        this.fw = fw;
-//        this.fv = fv;
-//    }
 
     public BrentIteration(double left, double right, double eps, DoubleFunction function) {
         super(left, right, eps, function);
@@ -105,7 +84,6 @@ public class BrentIteration extends AbstractMethodIteration {
             fv = fw;
             fw = fx;
             fx = fu;
-//            return new BrentIteration(function, newLeft, newRight, eps, u, x, w, fu, fx, fw, newD, newE);
         } else {
             if (u >= x) {
                 newRight = u;
@@ -117,13 +95,10 @@ public class BrentIteration extends AbstractMethodIteration {
                 w = u;
                 fv = fw;
                 fw = fu;
-//                return new BrentIteration(function, newLeft, newRight, eps, x, u, w, fx, fu, fw, newD, newE);
             } else if (fu <= fv || Math.abs(v - x) < eps || Math.abs(v - w) < eps) {
                 v = u;
                 fv = fu;
-//                return new BrentIteration(function, newLeft, newRight, eps, x, w, u, fx, fw, fu, newD, newE);
             }
-//            return new BrentIteration(function, newLeft, newRight, eps, x, w, v, fx, fw, fv, newD, newE);
         }
         left = newLeft;
         right = newRight;
