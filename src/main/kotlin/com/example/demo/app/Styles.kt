@@ -1,21 +1,30 @@
 package com.example.demo.app
 
+import javafx.scene.paint.Color
 import javafx.scene.text.FontWeight
-import tornadofx.Stylesheet
-import tornadofx.box
-import tornadofx.cssclass
-import tornadofx.px
+import tornadofx.*
 
 class Styles : Stylesheet() {
     companion object {
-        val heading by cssclass()
+        val chartBox by cssclass()
     }
 
     init {
-        label and heading {
+        root {
+            minWidth = 1400.px
+            minHeight = 700.px
+        }
+        root {
             padding = box(10.px)
             fontSize = 20.px
             fontWeight = FontWeight.BOLD
+        }
+        chartBox {
+            minWidth = 1000.px
+        }
+        button {
+            endMargin = 4.px
+            startMargin = 4.px
         }
     }
 }
