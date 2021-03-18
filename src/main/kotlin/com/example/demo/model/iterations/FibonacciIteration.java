@@ -1,45 +1,46 @@
 package com.example.demo.model.iterations;
 
 import com.example.demo.model.base.DoubleFunction;
+import com.example.demo.model.base.FibonacciCalculator;
 import com.example.demo.model.base.Point;
 
 import static com.example.demo.model.base.FibonacciCalculator.calculateIterationsCount;
 import static com.example.demo.model.base.FibonacciCalculator.fib;
 
 public class FibonacciIteration extends AbstractMethodIteration {
-    private final double left;
-    private final double right;
-    private final double eps;
     private final double x1;
     private final double x2;
     private final double fx1;
     private final double fx2;
     private final int n;
     private final int k;
-    private final DoubleFunction func;
-    private final double initial_right;
-    private final double initial_left;
+    private final double len;
+
+    public FibonacciIteration(double left, double right, double eps) {
+        this(left, right, eps, x -> -3.0 * x * Math.sin(0.75 * x) + Math.exp(-2.0 * x));
+    }
+
+    public FibonacciIteration(double left, double right, double eps, DoubleFunction func) {
+        super(left, right, eps, func);
+        this.n = FibonacciCalculator.calculateIterationsCount(left, right, eps);
+        this.x1 = left + fib(n) / fib(n + 2) * (right - left);
+        this.x2 = left + fib(n + 1) / fib(n + 2) * (right - left);
+        this.fx1 = apply(x1);
+        this.fx2 = apply(x2);
+        this.k = 1;
+        this.len = right - left;
+    }
 
     public FibonacciIteration(double left, double right, double eps, double x1, double x2,
-                              double fx1, double fx2, int n, int k, DoubleFunction func, int calcLeft,
-                              double initial_left, double initial_right) {
-        super(func);
-        this.left = left;
-        this.right = right;
-        this.eps = eps;
+                              double fx1, double fx2, int n, int k, DoubleFunction func, double len) {
+        super(left, right, eps, func);
         this.x1 = x1;
         this.x2 = x2;
         this.fx1 = fx1;
         this.fx2 = fx2;
         this.n = n;
         this.k = k;
-        this.func = func;
-        this.initial_left = initial_left;
-        this.initial_right = initial_right;
-    }
-
-    private double f(double x) {
-        return func.apply(x);
+        this.len = len;
     }
 
     @Override
@@ -49,18 +50,26 @@ public class FibonacciIteration extends AbstractMethodIteration {
 
     @Override
     public FibonacciIteration next() {
-        return null;
+        double newLeft, newRight, newX1, newX2, newFx1, newFx2;
+        if (fx1 > fx2) {
+            newLeft = x1;
+            newRight = right;
+            newX1 = x2;
+            newX2 = newLeft + fib(n - k + 2) / fib(n + 2) * (len);
+            newFx1 = fx2;
+            newFx2 = apply(newX2);
+        } else {
+            newLeft = left;
+            newRight = x2;
+            newX2 = x1;
+            newX1 = left + fib(n - k + 1) / fib(n + 2) * (len);
+            newFx1 = apply(newX1);
+            newFx2 = fx1;
+        }
+        return new FibonacciIteration(newLeft, newRight, eps, newX1, newX2, newFx1, newFx2, n, k + 1, function, len);
     }
 
     public Point getExtremumImpl() {
-        double x = (left + right) / 2.0;
-        return new Point(x, apply(x));
-    }
-
-    @Override
-    public Point getExtremum() {
-        if (hasNext())
-            throw new UnsupportedOperationException("getExtremum allowed only after all iterations");
         double x = (left + right) / 2.0;
         return new Point(x, apply(x));
     }
@@ -94,7 +103,7 @@ public class FibonacciIteration extends AbstractMethodIteration {
     }
 
     public DoubleFunction getFunc() {
-        return func;
+        return this.function;
     }
 
     @Override
@@ -109,7 +118,11 @@ public class FibonacciIteration extends AbstractMethodIteration {
                 ", fx2=" + fx2 +
                 ", n=" + n +
                 ", k=" + k +
-                ", func=" + func +
                 '}';
+    }
+
+    @Override
+    public String toTex() {
+        return String.format("%.4f & %.4f & %.4f & %.4f & %.4f & %.4f \\\\\n\\hline", left, right, x1, x2, fx1, fx2);
     }
 }

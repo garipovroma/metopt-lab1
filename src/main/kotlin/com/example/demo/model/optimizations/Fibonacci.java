@@ -9,20 +9,12 @@ import static com.example.demo.model.base.FibonacciCalculator.calculateIteration
 
 public class Fibonacci {
     private FibonacciIteration iteration;
-    public static FibonacciIteration Iteration(double left, double right, double eps, DoubleFunction func) {
-        int n = calculateIterationsCount(left, right, eps);
-        double x1 = left + fib(n) / fib(n + 2) * (right - left);
-        double x2 = left + fib(n + 1) / fib(n + 2) * (right - left);
-        return new FibonacciIteration(left, right, eps,
-                x1, x2, func.apply(x1), func.apply(x2), n, 0,func, 0, left, right);
-    }
-    public Fibonacci(double left, double right, double eps, DoubleFunction func) {
-        iteration = Iteration(left, right, eps, func);
+    public static FibonacciIteration Iteration(double left, double right, double eps) {
+        return new FibonacciIteration(left, right, eps);
     }
     public Fibonacci(double left, double right, double eps) {
-        this(left, right, eps, x -> -3.0 * x * Math.sin(0.75 * x) + Math.exp(-2.0 * x));
+        iteration = Iteration(left, right, eps);
     }
-
     public Point run(boolean print) {
         if (print) {
             System.out.println(iteration);

@@ -1,7 +1,9 @@
 package com.example.demo.controller;
 
+import com.example.demo.model.base.DoubleFunction;
 import com.example.demo.model.base.Graph;
 import com.example.demo.model.base.Point;
+import com.example.demo.model.iterations.OptimizationMethodIteration;
 import com.example.demo.model.iterations.ParabolaIteration;
 
 import java.util.ArrayList;
@@ -12,12 +14,13 @@ public class ParabolaViewIterator extends BaseViewIterator{
     private final Point extremum;
     private final double left;
     private final double right;
-    public ParabolaViewIterator(double left, double right, double eps) {
+    public ParabolaViewIterator(double left, double right, double eps, DoubleFunction function) {
         this.extremum = new Point(1.0, 1.0);
         // :TODO: assign smth
         this.left = left;
         this.right = right;
-        this.parabolaIteration = new ParabolaIteration(left, right, eps, x -> -3.0 * x * Math.sin(0.75 * x) + Math.exp(-2.0 * x));
+        this.parabolaIteration =
+            new ParabolaIteration(left, right, eps, function);
     }
     @Override
     public boolean hasNext() {
@@ -27,8 +30,8 @@ public class ParabolaViewIterator extends BaseViewIterator{
     @Override
     public List<Graph> next() {
         List<Graph> res = new ArrayList<>();
-        double left = parabolaIteration.getLeft();
-        double right = parabolaIteration.getRight();
+//        double left = parabolaIteration.getLeft();
+//        double right = parabolaIteration.getRight();
         res.add(Graph.intervalCount(
                 left,
                 right,
@@ -37,8 +40,8 @@ public class ParabolaViewIterator extends BaseViewIterator{
                 null
         ));
         res.add(Graph.intervalCount(
-                left,
-                right,
+                parabolaIteration.getLeft(),
+                parabolaIteration.getRight(),
                 100,
                 parabolaIteration.getApproximationParabola(),
                 null
@@ -51,5 +54,10 @@ public class ParabolaViewIterator extends BaseViewIterator{
     @Override
     public String toString() {
         return "Parabola";
+    }
+
+    @Override
+    public OptimizationMethodIteration getIteration() {
+        return parabolaIteration;
     }
 }
