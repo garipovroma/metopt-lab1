@@ -82,12 +82,16 @@ public class GoldenRatioIteration extends AbstractMethodIteration {
 
     @Override
     public String toString() {
-        /*return "GoldenRatioIteration{" +
-                "left=" + left +
-                ", right=" + right +
-                ", eps=" + eps +
-                ", func=" + func +
-                '}';*/
+        return "GoldenRatioIteration{" +
+                "x1=" + x1 +
+                ", x2=" + x2 +
+                ", fx1=" + fx1 +
+                ", fx2=" + fx2 +
+                '}';
+    }
+
+    @Override
+    public String toTex() {
         return String.format("%.4f & %.4f & %.4f & %.4f & %.4f & %.4f \\\\\n\\hline", left, right, x1, x2, fx1, fx2);
     }
 }

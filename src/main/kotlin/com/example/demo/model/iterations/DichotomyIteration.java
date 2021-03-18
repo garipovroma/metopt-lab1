@@ -61,9 +61,11 @@ public class DichotomyIteration extends AbstractMethodIteration {
                 ", eps=" + eps +
                 ", x1=" + x1 +
                 ", x2=" + x2 +
-//                ", func=" + func +
                 '}';
-        //return left + " & " + right + " & " + x1 + " & " + x2 + " & " + fx1 + " & " + fx2 + " \\\\" + "\n" + "\\hline";
-        //return String.format("%.4f & %.4f & %.4f & %.4f & %.4f & %.4f \\\\\n\\hline", left, right, x1, x2, y1, y2);
+    }
+
+    @Override
+    public String toTex() {
+        return String.format("%.4f & %.4f & %.4f & %.4f & %.4f & %.4f \\\\\n\\hline", left, right, x1, x2, y1, y2);
     }
 }

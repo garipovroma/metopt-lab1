@@ -11,4 +11,5 @@ public interface OptimizationMethodIteration {
     double getLeft();
     double getRight();
     double getEps();
+    public String toTex();
 }

@@ -126,4 +126,9 @@ public class BrentIteration extends AbstractMethodIteration {
                 ", tol=" + tol +
                 '}';
     }
+
+    @Override
+    public String toTex() {
+        return String.format("%.4f & %.4f & %.4f & %.4f & %.4f & %.4f & %.4f & %.4f \\\\\n\\hline", left, right, x, w, v, fx, fw, fv);
+    }
 }
