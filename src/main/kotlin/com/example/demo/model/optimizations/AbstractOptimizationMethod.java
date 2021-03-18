@@ -1,20 +1,24 @@
 package com.example.demo.model.optimizations;
 
-import com.example.demo.model.base.Point;
 import com.example.demo.model.iterations.OptimizationMethodIteration;
 
-@Deprecated
-public class OptimizationMethodRunner {
-    public static OptimizationMethodResult run(OptimizationMethodIteration iteration, boolean print) {
+public abstract class AbstractOptimizationMethod {
+    private final OptimizationMethodIteration iteration;
+
+    AbstractOptimizationMethod(OptimizationMethodIteration iteration) {
+        this.iteration = iteration;
+    }
+
+    public OptimizationMethodResult run(boolean print) {
         if (print) {
-            print(iteration, 0);
+            print(0);
         }
         int counter = 1;
         double lastLen = iteration.getRight() - iteration.getLeft();
         while (iteration.hasNext()) {
             iteration.next();
             if (print) {
-                print(iteration, lastLen);
+                print(lastLen);
             }
             lastLen = iteration.getRight() - iteration.getLeft();
             counter++;
@@ -22,7 +26,7 @@ public class OptimizationMethodRunner {
         return new OptimizationMethodResult(iteration.getExtremum(), counter);
     }
 
-    public static void print(OptimizationMethodIteration iteration, double lastLen) {
+    public void print(double lastLen) {
         final int offsetInToTexString = 9;
         final int substringConstant = 6;
         double curRatio = (iteration.getRight() - iteration.getLeft()) / lastLen;

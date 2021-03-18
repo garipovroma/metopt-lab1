@@ -26,6 +26,7 @@ public class Main {
 
         // Statistics
         System.out.println("Statistics");
+        System.out.println(new DichotomyMethod(0, 2 * Math.PI, 1e-3, 1e-9, f).run(false));
         System.out.println(OptimizationMethodRunner.run(new DichotomyIteration(0, 2 * Math.PI, 1e-3, 1e-9, f), false));
         System.out.println(OptimizationMethodRunner.run(new GoldenRatioIteration(0, 2 * Math.PI, 1e-3, f), false));
         System.out.println(OptimizationMethodRunner.run(new ParabolaIteration(0, 2 * Math.PI, 1e-3, f), false));
