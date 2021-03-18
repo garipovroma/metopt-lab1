@@ -18,20 +18,20 @@ public class ParabolaIteration extends AbstractMethodIteration {
     private double prevPMinX;
 
     public static Point findParabolaMin(double x1, double x2, double x3, double fx1, double fx2, double fx3,
-                                        DoubleFunction func, /*TODO: remove it after stat calcs!!*/ boolean eug) {
-        double a1 = (fx2 - fx1) / (x2 - x1),
-                a2 = ( (fx3 - fx1) / (x3 - x1) - (fx2 - fx1) / (x2 - x1) ) / (x3 - x2);
-        DoubleFunction parabola = findApproximationParabola(x1, x2, x3, fx1, fx2, fx3).toDoubleFunction();
-        double x = (x1 + x2 - a1 / a2) / 2;
+                                        DoubleFunction func) {
+        double x = findParabolaMinX(x1, x2, x3, fx1, fx2, fx3);
         double y = func.apply(x);
-        if (eug && func instanceof DoubleFunctionCounter) {
-            ((DoubleFunctionCounter) func).count--;
-        }
         return new Point(x, y);
     }
 
+    public static double findParabolaMinX(double x1, double x2, double x3, double fx1, double fx2, double fx3) {
+        double a1 = (fx2 - fx1) / (x2 - x1),
+                a2 = ( (fx3 - fx1) / (x3 - x1) - (fx2 - fx1) / (x2 - x1) ) / (x3 - x2);
+        return (x1 + x2 - a1 / a2) / 2;
+    }
+
     private Point findParabolaMin() {
-        return findParabolaMin(x1, x2, x3, fx1, fx2, fx3, function, false);
+        return findParabolaMin(x1, x2, x3, fx1, fx2, fx3, function);
     }
 
     private static int compare(double x, double y) {

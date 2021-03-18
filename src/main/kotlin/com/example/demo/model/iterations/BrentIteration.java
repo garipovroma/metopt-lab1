@@ -47,8 +47,7 @@ public class BrentIteration extends AbstractMethodIteration {
         boolean accepted = false;
         double u = 0.0;
         if (different(x, w, v, eps) && different(fx, fw, fv, eps)) {
-            Point point = ParabolaIteration.findParabolaMin(x, w, v, fx, fw, fv, function, true);
-            u = point.getX();
+            u = ParabolaIteration.findParabolaMinX(x, w, v, fx, fw, fv);
             if (u >= left && u <= right && Math.abs(u - x) < e / 2.0) {
                 accepted = true;
             } else if (u - left < 2.0 * tol || right - u < 2.0 * tol) {
