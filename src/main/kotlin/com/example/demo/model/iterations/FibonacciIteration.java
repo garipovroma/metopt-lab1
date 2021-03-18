@@ -63,18 +63,6 @@ public class FibonacciIteration extends AbstractMethodIteration {
         return new Point(x, apply(x));
     }
 
-    public double getLeft() {
-        return left;
-    }
-
-    public double getRight() {
-        return right;
-    }
-
-    public double getEps() {
-        return eps;
-    }
-
     public double getX1() {
         return x1;
     }
