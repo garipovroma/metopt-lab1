@@ -12,7 +12,10 @@ public class BrentIteration extends AbstractMethodIteration {
     private double fw;
     private double fv;
     private double d;
+    private double u;
     private double e;
+    private boolean accepted = false;
+    private ParabolaIteration.Parabola parabola;
 
     public BrentIteration(double left, double right, double eps, DoubleFunction function) {
         super(left, right, eps, function);
@@ -40,13 +43,26 @@ public class BrentIteration extends AbstractMethodIteration {
         return eps * Math.abs(x) + eps / 10.0;
     }
 
+    public boolean isParabolaAccepted() {
+        return accepted;
+    }
+
+    public double getU() {
+        return u;
+    }
+
+    public ParabolaIteration.Parabola getParabola() {
+        return parabola;
+    }
+
     @Override
     public void next() {
         double tol = tol(x);
         double newE = d;
-        boolean accepted = false;
-        double u = 0.0;
+        accepted = false;
+        u = 0.0;
         if (different(x, w, v, eps) && different(fx, fw, fv, eps)) {
+            parabola = ParabolaIteration.findApproximationParabola(x, w, v, fx, fw, fv);
             u = ParabolaIteration.findParabolaMinX(x, w, v, fx, fw, fv);
             if (u >= left && u <= right && Math.abs(u - x) < e / 2.0) {
                 accepted = true;

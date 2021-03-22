@@ -141,6 +141,11 @@ class MethodController: Controller() {
                 override fun viewIterator() =
                     FibonacciViewIterator(0.0, Math.PI * 2.0, 1e-3, func)
                 override fun toString(): String = "Fibonacci"
+            },
+            object : ViewFactory {
+                override fun viewIterator() =
+                    BrentViewIterator(0.0, Math.PI * 2.0, 1e-3, func)
+                override fun toString(): String = "Brent"
             }
         )
 }

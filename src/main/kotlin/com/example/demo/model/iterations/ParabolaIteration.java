@@ -48,6 +48,7 @@ public class ParabolaIteration extends AbstractMethodIteration {
             return 1;
         }
     }
+
     private double findInitialPoint(double l, double r, double fx1, double fx3) {
         double x2;
         for (int i = 0; i < INITIAL_POINT_SEARCH_STEPS; i++) {
@@ -72,10 +73,10 @@ public class ParabolaIteration extends AbstractMethodIteration {
         return fOfMinX;
     }
 
-    private static class Parabola {
+    public static class Parabola {
         private final double a, b, c;
 
-        private Parabola(double a, double b, double c) {
+        Parabola(double a, double b, double c) {
             this.a = a;
             this.b = b;
             this.c = c;
@@ -115,6 +116,11 @@ public class ParabolaIteration extends AbstractMethodIteration {
 
     @Override
     public boolean hasNext() { return isFirst || compareWithEps(prevPMinX, pMinX) != 0; }
+
+    @Override
+    protected Point getExtremumImpl() {
+        return new Point(getpMinX(), getFofMinX());
+    }
 
     @Override
     public void next() {
@@ -158,30 +164,6 @@ public class ParabolaIteration extends AbstractMethodIteration {
         approximationParabola = parabola.toDoubleFunction();
     }
 
-    public double getLeft() {
-        return left;
-    }
-
-    public double getRight() {
-        return right;
-    }
-
-    public double getEps() {
-        return eps;
-    }
-
-    public DoubleFunction getFunc() {
-        return function;
-    }
-
-    public double getX1() {
-        return x1;
-    }
-
-    public double getX2() {
-        return x2;
-    }
-
     @Override
     public String toString() {
         return "ParabolaIteration{" +
@@ -205,10 +187,5 @@ public class ParabolaIteration extends AbstractMethodIteration {
     @Override
     public String toTex() {
         return String.format("%.4f & %.4f & %.4f & %.4f & %.4f & %.4f & %.4f & %.4f \\\\\n\\hline", x1, x2, x3, fx1, fx2, fx3, pMinX, fOfMinX);
-    }
-
-    @Override
-    protected Point getExtremumImpl() {
-        return new Point(getpMinX(), getFofMinX());
     }
 }

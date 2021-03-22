@@ -5,29 +5,30 @@ import com.example.demo.model.base.Graph;
 import com.example.demo.model.base.Point;
 import com.example.demo.model.iterations.FibonacciIteration;
 import com.example.demo.model.iterations.OptimizationMethodIteration;
+import com.example.demo.model.optimizations.FibonacciMethod;
+import com.example.demo.model.optimizations.OptimizationMethodResult;
 import com.example.demo.model.optimizations.OptimizationMethodRunner;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class FibonacciViewIterator extends BaseViewIterator {
-    private FibonacciIteration fibonacciIteration;
+    private final FibonacciIteration fibonacciIteration;
     private final Point extremum;
-    private final double left;
-    private final double right;
-
     public FibonacciViewIterator(double left, double right, double eps, DoubleFunction function) {
-        this.left = left;
-        this.right = right;
+        super(left, right);
         this.fibonacciIteration = new FibonacciIteration(left, right, eps, function);
-        this.extremum = OptimizationMethodRunner.run(fibonacciIteration, false).getExtremum();
+        OptimizationMethodResult result = new FibonacciMethod(left, right, eps, function).run(false);
+        this.extremum = result.getExtremum();
+        iterationsCount = result.getIterationCount();
     }
 
     public boolean hasNext() {
-        return fibonacciIteration.hasNext();
+        return currentIteration < iterationsCount;
     }
 
     public List<Graph> next() {
+        currentIteration++;
         List<Graph> res = new ArrayList<>();
         res.add(
                 Graph.intervalCount(
@@ -35,21 +36,13 @@ public class FibonacciViewIterator extends BaseViewIterator {
                         right,
                         100,
                         fibonacciIteration.getFunc(),
-                        null
+                        "function"
                 ));
-        addSinglePointGraph(res,
-                new Point(
-                        fibonacciIteration.getX1(),
-                        fibonacciIteration.getFunc().apply(fibonacciIteration.getX1())
-                ), "x1"
-        );
-        addSinglePointGraph(res,
-                new Point(
-                        fibonacciIteration.getX2(),
-                        fibonacciIteration.getFunc().apply(fibonacciIteration.getX2())
-                ), "x2"
-        );
-        addSinglePointGraph(res, extremum, "extremum");
+        Point leftPoint = new Point(fibonacciIteration.getLeft(), apply(fibonacciIteration.getLeft()));
+        addSinglePointGraph(res, leftPoint, "left: " + leftPoint);
+        Point rightPoint = new Point(getIteration().getRight(), apply(getIteration().getRight()));
+        addSinglePointGraph(res, rightPoint, "right: " + rightPoint);
+        addSinglePointGraph(res, extremum, "extremum: " + extremum);
         fibonacciIteration.next();
         return res;
     }

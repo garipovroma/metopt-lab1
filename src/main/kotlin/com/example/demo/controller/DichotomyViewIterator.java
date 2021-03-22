@@ -5,6 +5,7 @@ import com.example.demo.model.base.Graph;
 import com.example.demo.model.base.Point;
 import com.example.demo.model.iterations.DichotomyIteration;
 import com.example.demo.model.iterations.OptimizationMethodIteration;
+import com.example.demo.model.optimizations.DichotomyMethod;
 import com.example.demo.model.optimizations.OptimizationMethodResult;
 import com.example.demo.model.optimizations.OptimizationMethodRunner;
 
@@ -12,19 +13,16 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class DichotomyViewIterator extends BaseViewIterator {
-    private DichotomyIteration iteration;
-    private final double left;
-    private final double right;
+    private final DichotomyIteration iteration;
     private final OptimizationMethodResult result;
     private int currentIteration = 0;
     private final int iterationCount;
 
     public DichotomyViewIterator(double left, double right, double eps, double delta, DoubleFunction func) {
+        super(left, right);
         this.iteration = new DichotomyIteration(left, right, eps, delta, func);
-        this.result = OptimizationMethodRunner.run(iteration, false);
+        this.result = new DichotomyMethod(left, right, eps, delta, func).run(false);
         this.iterationCount = result.getIterationCount();
-        this.left = iteration.getLeft();
-        this.right = iteration.getRight();
     }
 
     public boolean hasNext() {
