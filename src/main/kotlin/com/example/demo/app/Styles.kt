@@ -5,6 +5,7 @@ import javafx.scene.text.FontWeight
 import tornadofx.*
 
 class Styles : Stylesheet() {
+
     companion object {
         val chartBox by cssclass()
     }

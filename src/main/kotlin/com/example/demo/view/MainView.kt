@@ -18,7 +18,7 @@ class NextIterationEvent(val view: GraphView) : FXEvent()
 
 class PrevIterationEvent(val view: GraphView) : FXEvent()
 
-class MainView : View("huy TornadoFX") {
+class MainView : View("Optimization methods") {
     val controller: MethodController by inject()
     var eps: Double = 1e-3
     fun getChart(graphs: List<Graph>): LineChart<Number, Number>.() -> Unit = {
