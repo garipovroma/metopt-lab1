@@ -6,6 +6,7 @@ import com.example.demo.model.base.Graph
 import com.example.demo.model.base.Point
 import javafx.scene.chart.LineChart
 import javafx.scene.chart.NumberAxis
+import javafx.scene.layout.VBox
 import tornadofx.*
 import java.util.*
 import kotlin.math.exp
@@ -13,12 +14,13 @@ import kotlin.math.sin
 
 class SelectionMethodEvent(val factory: ViewFactory) : FXEvent()
 
-class NextIterationEvent(val graphs: List<Graph>) : FXEvent()
+class NextIterationEvent(val view: GraphView) : FXEvent()
+
+class PrevIterationEvent(val view: GraphView) : FXEvent()
 
 class MainView : View("huy TornadoFX") {
     val controller: MethodController by inject()
-    var iterator: ViewIterator? = null
-
+    var eps: Double = 1e-3
     fun getChart(graphs: List<Graph>): LineChart<Number, Number>.() -> Unit = {
         graphs.map { graph ->
             animated = false
@@ -79,18 +81,14 @@ class MainView : View("huy TornadoFX") {
     override val root = hbox {
         addClass(Styles.chartBox)
         vbox {
+            id = "vbox"
             combobox(values = controller.methods) {
                 setOnAction {
                     fire(SelectionMethodEvent(selectionModel.selectedItem))
                 }
             }
-            button("next") {
-                style = "-fx-margin: 5px"
-                action {
-                    if (iterator!!.hasNext()) {
-                        fire(NextIterationEvent(iterator!!.next()))
-                    }
-                }
+            hbox {
+                id = "mainBox"
             }
         }
         val xAxis = NumberAxis()
@@ -102,18 +100,51 @@ class MainView : View("huy TornadoFX") {
             addClass(Styles.chartBox)
         }
         subscribe<SelectionMethodEvent> {
-            iterator = it.factory.viewIterator()
-            if (iterator!!.hasNext()) {
-                fire(NextIterationEvent(iterator!!.next()))
-            }
+            val factory = it.factory.view(eps)
+            val node = (this@hbox.children.find {node -> node.id == "vbox"} as VBox)
+                .children.find {node -> node.id == "mainBox"}
+            node!!.replaceWith(hbox {
+                id = "mainBox"
+                button("next") {
+                    style = "-fx-margin: 5px"
+                    action {
+                        fire(NextIterationEvent(factory))
+                    }
+                }
+                button("prev") {
+                    style = "-fx-margin: 5px"
+                    action {
+                        fire(PrevIterationEvent(factory))
+                    }
+                }
+            })
+            fire(NextIterationEvent(factory))
         }
         subscribe<NextIterationEvent> {
-            chart.title = iterator.toString()
-            chart.data.clear()
-            xAxis.setXAxis(it.graphs)
-            yAxis.setYAxis(it.graphs)
-            chart.(getChart(it.graphs))()
-            this@hbox.add(chart)
+            with (it) {
+                if (view.hasNext()) {
+                    chart.title = view.toString()
+                    chart.data.clear()
+                    val graphs = view.next()
+                    xAxis.setXAxis(graphs)
+                    yAxis.setYAxis(graphs)
+                    chart.(getChart(graphs))()
+                    this@hbox.add(chart)
+                }
+            }
+        }
+        subscribe<PrevIterationEvent> {
+            with (it) {
+                if (view.hasPrev()) {
+                    chart.title = view.toString()
+                    chart.data.clear()
+                    val graphs = view.prev()
+                    xAxis.setXAxis(graphs)
+                    yAxis.setYAxis(graphs)
+                    chart.(getChart(graphs))()
+                    this@hbox.add(chart)
+                }
+            }
         }
     }
 }
@@ -123,28 +154,33 @@ class MethodController: Controller() {
     val methods =
         listOf(
             object : ViewFactory {
-                override fun viewIterator() =
-                    DichotomyViewIterator(0.0, Math.PI * 2.0, 1e-3, 1e-5, func)
+                override fun view(eps: Double) =
+                    GraphView(DichotomyViewIterator(0.0, Math.PI * 2.0, eps, eps / 10.0, func),
+                        "Dichotomy")
                 override fun toString(): String = "Dichotomy"
             },
             object : ViewFactory {
-                override fun viewIterator() =
-                    GoldenRationViewIterator(0.0, Math.PI * 2.0, 1e-3, func)
-                override fun toString(): String = "Golden Ration"
+                override fun view(eps: Double) =
+                    GraphView(GoldenRationViewIterator(0.0, Math.PI * 2.0, eps, func),
+                        "Golden Ratio")
+                override fun toString(): String = "Golden Ratio"
             },
             object : ViewFactory {
-                override fun viewIterator() =
-                    ParabolaViewIterator(0.0, Math.PI * 2.0, 1e-3, func)
+                override fun view(eps: Double) =
+                    GraphView(ParabolaViewIterator(0.0, Math.PI * 2.0, eps, func),
+                        "Parabola")
                 override fun toString(): String = "Parabola"
             },
             object : ViewFactory {
-                override fun viewIterator() =
-                    FibonacciViewIterator(0.0, Math.PI * 2.0, 1e-3, func)
+                override fun view(eps: Double) =
+                    GraphView(FibonacciViewIterator(0.0, Math.PI * 2.0, eps, func),
+                        "Fibonacci")
                 override fun toString(): String = "Fibonacci"
             },
             object : ViewFactory {
-                override fun viewIterator() =
-                    BrentViewIterator(0.0, Math.PI * 2.0, 1e-3, func)
+                override fun view(eps: Double) =
+                    GraphView(BrentViewIterator(0.0, Math.PI * 2.0, eps, func),
+                        "Brent")
                 override fun toString(): String = "Brent"
             }
         )

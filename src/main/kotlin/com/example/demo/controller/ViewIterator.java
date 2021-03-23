@@ -7,4 +7,5 @@ import java.util.List;
 public interface ViewIterator {
     boolean hasNext();
     List<Graph> next();
+    int getIterationsCount();
 }

@@ -10,7 +10,7 @@ import java.util.List;
 
 public abstract class BaseViewIterator implements ViewIterator {
     protected double currentIteration;
-    protected double iterationsCount;
+    protected int iterationsCount;
     protected final double left;
     protected final double right;
     protected BaseViewIterator(double left, double right) {
@@ -29,4 +29,8 @@ public abstract class BaseViewIterator implements ViewIterator {
     }
 
     public abstract OptimizationMethodIteration getIteration();
+
+    public int getIterationsCount() {
+        return iterationsCount;
+    }
 }

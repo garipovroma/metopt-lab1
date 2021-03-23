@@ -16,17 +16,16 @@ public class DichotomyViewIterator extends BaseViewIterator {
     private final DichotomyIteration iteration;
     private final OptimizationMethodResult result;
     private int currentIteration = 0;
-    private final int iterationCount;
 
     public DichotomyViewIterator(double left, double right, double eps, double delta, DoubleFunction func) {
         super(left, right);
         this.iteration = new DichotomyIteration(left, right, eps, delta, func);
         this.result = new DichotomyMethod(left, right, eps, delta, func).run(false);
-        this.iterationCount = result.getIterationCount();
+        iterationsCount = result.getIterationCount();
     }
 
     public boolean hasNext() {
-        return currentIteration < iterationCount;
+        return currentIteration < iterationsCount;
     }
 
     public List<Graph> next() {
